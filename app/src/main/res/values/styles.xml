@@ -45,4 +45,10 @@
     <style name="MediumDarkTextView" parent="MediumTextView">
         <item name="android:textColor">@color/darkText</item>
     </style>
+    <style name="TodoButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lightText</item>
+        <item name="android:background">@drawable/round_button_background</item>
+    </style>
 </resources>

@@ -15,6 +15,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     tools:context=".features.dashboard.DashboardActivity">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cvProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,15 +47,18 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 app:layout_constraintTop_toBottomOf="@+id/tvHeading"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
-            <ProgressBar
+            <SeekBar
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="0dp"
                 android:layout_height="4dp"
                 android:min="0"
-                android:progress="30"
+                android:progress="@={dashboardViewModel.todoProgress}"
                 android:max="100"
                 android:progressBackgroundTint="@color/darkGrey"
                 android:progressTint="@color/colorAccent"
+                android:clickable="false"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:layout_marginRight="@dimen/xsmall_margin"
                 android:layout_marginTop="@dimen/xsmall_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -68,6 +72,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="30%"
+                android:text="@{dashboardViewModel.todoProgressPcnt}"
                 app:layout_constraintLeft_toLeftOf="@+id/tvDone"
                 app:layout_constraintBottom_toTopOf="@+id/tvDone"/>
             
@@ -83,6 +88,22 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_marginBottom="@dimen/small_margin"
+       app:layout_constraintTop_toBottomOf="@+id/cvProgress"
+       app:layout_constraintBottom_toTopOf="@+id/btnAdd"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        style="@style/TodoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add item"
+        android:layout_margin="@dimen/small_margin"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

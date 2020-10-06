@@ -14,5 +14,18 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     val showContent: MutableLiveData<Boolean>
         get() = _showContent
 
+    private val _todoProgress: MutableLiveData<Int> = MutableLiveData()
+    var todoProgress: MutableLiveData<Int> = MutableLiveData()
+        get() = _todoProgress
+
+    private val _todoProgressPcnt: MutableLiveData<String> = MutableLiveData()
+    val todoProgressPcnt: MutableLiveData<String>
+        get() = _todoProgressPcnt
+
     var busyMessage: String = ""
+
+    init {
+        _todoProgress.value = 70
+        _todoProgressPcnt.value = "${_todoProgress.value}%"
+    }
 }
