@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -129,4 +130,14 @@ private fun createTranslucentStatusBarView(activity: Activity, alpha: Int): View
 private fun getStatusBarHeight(context: Context): Int {
     val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
     return context.resources.getDimensionPixelSize(resourceId)
+}
+
+fun AppCompatActivity.initTransitions() {
+    try {
+        val activityTransition = this.intent.getBundleExtra(PAYLOAD_KEY).getIntArray(ACTIVITY_TRANSITION)
+        this.overridePendingTransition(activityTransition!![0], activityTransition[1])
+    }
+    catch (e: Exception) {
+        Log.e("AT", "$e")
+    }
 }
