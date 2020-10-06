@@ -18,14 +18,21 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="largeTextView" parent="BaseTextView">
+    <style name="XlargeTextView" parent="BaseTextView">
+        <item name="android:textSize">@dimen/xlarge_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="XLargeDarkTextView" parent="XlargeTextView">
+        <item name="android:textColor">@color/darkText</item>
+    </style>
+    <style name="LargeTextView" parent="BaseTextView">
         <item name="android:textSize">@dimen/large_text</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="LargeDarkTextView" parent="largeTextView">
+    <style name="LargeDarkTextView" parent="LargeTextView">
         <item name="android:textColor">@color/darkText</item>
     </style>
-    <style name="LargeLightTextView" parent="largeTextView">
+    <style name="LargeLightTextView" parent="LargeTextView">
         <item name="android:textColor">@color/lightText</item>
     </style>
     <style name="MediumTextView" parent="BaseTextView">
