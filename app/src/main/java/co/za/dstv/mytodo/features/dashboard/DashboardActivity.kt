@@ -8,13 +8,15 @@ import androidx.lifecycle.ViewModelProviders
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
+import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
+import co.za.dstv.mytodo.helpers.showDialogFragment
 import co.za.dstv.mytodo.helpers.showLoadingDialog
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardActivity : BaseParentActivity() {
     private lateinit var binding: ActivityDashboardBinding
-    private lateinit var dashboardViewModel: DashboardViewModel
+    lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,5 +46,11 @@ class DashboardActivity : BaseParentActivity() {
     private fun onShowContent(showContent: Boolean) {
         hideCurrentLoadingDialog(this)
         clCParent.visibility = View.VISIBLE
+    }
+
+    fun onAddButtonClicked(view: View){
+        var addItemFragment = AddItemFragment.newInstance()
+        addItemFragment.isCancelable = true
+        showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }
 }

@@ -50,7 +50,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             <SeekBar
                 style="@style/ProgressBarStyle"
                 android:layout_width="0dp"
-                android:layout_height="5dp"
+                android:layout_height="4dp"
                 android:min="0"
                 android:progress="@={dashboardViewModel.todoProgress}"
                 android:max="100"
@@ -102,7 +102,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:layout_height="wrap_content"
         android:text="Add item"
         android:layout_margin="@dimen/small_margin"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:onClick="onAddButtonClicked"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
