@@ -51,4 +51,9 @@
         <item name="android:textColor">@color/lightText</item>
         <item name="android:background">@drawable/round_button_background</item>
     </style>
+    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:focusable">false</item>
+        <item name="android:enabled">false</item>
+        <item name="android:clickable">false</item>
+    </style>
 </resources>
