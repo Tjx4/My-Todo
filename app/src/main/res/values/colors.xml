@@ -7,6 +7,7 @@
     <color name="lightGreyText">#aaa</color>
     <color name="lightText">#DDD</color>
     <color name="darkText">#111</color>
+    <color name="lightBackground">#FFF</color>
     <color name="greyBackground">#EEE</color>
     <color name="editTextBackground">#f4f4f6</color>
 </resources>

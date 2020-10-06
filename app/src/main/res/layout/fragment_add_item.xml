@@ -11,19 +11,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".features.dashboard.fragments.AddItemFragment">
+        tools:context=".features.dashboard.fragments.AddItemFragment"
+        android:paddingBottom="@dimen/large_padding"
+        android:background="@color/lightBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTopBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 style="@style/MediumDarkTextView"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="Add new Item"
+                android:text="Add new item details"
                 android:paddingLeft="@dimen/small_padding"
                 android:paddingRight="@dimen/large_padding"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -48,7 +50,7 @@
         <EditText
             android:id="@+id/txtItemName"
             style="@style/DarkEditText"
-            android:hint="Name"
+            android:hint="Title"
             android:text="@={dashboardViewModel.itemTitle}"
             android:singleLine="true"
             android:layout_width="match_parent"
@@ -75,7 +77,6 @@
             android:id="@+id/btnSignIn"
             android:text="@string/save_item"
             android:onClick="onSaveLocationButtonClicked"
-            android:layout_marginBottom="@dimen/xlarge__margin"
             android:layout_marginTop="@dimen/medium_margin"
             android:layout_marginHorizontal="@dimen/medium_margin"
             app:layout_constraintTop_toBottomOf="@+id/txtItemDescription" />
