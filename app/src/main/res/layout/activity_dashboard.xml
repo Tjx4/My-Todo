@@ -50,7 +50,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             <SeekBar
                 style="@style/ProgressBarStyle"
                 android:layout_width="0dp"
-                android:layout_height="4dp"
+                android:layout_height="5dp"
                 android:min="0"
                 android:progress="@={dashboardViewModel.todoProgress}"
                 android:max="100"
