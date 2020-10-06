@@ -29,11 +29,8 @@ val TRAIL_FROM = getTransitionAnimation(R.anim.trail_in2, R.anim.trail_out2)
 const val DEFAULT_STATUS_BAR_ALPHA = 112
 private const val FAKE_TRANSLUCENT_VIEW_ID = R.id.statusbarutil_translucent_view
 
-fun AppCompatActivity.goToActivityWithPayload(activity: Class<*>, payload: Bundle, transitionAnimation: Transition) {
-    goToActivity(activity, transitionAnimation, payload)
-}
 
-fun AppCompatActivity.goToActivityWithNoPayload(activity: Class<*>, transitionAnimation: Transition) {
+fun AppCompatActivity.navigateToActivity(activity: Class<*>, transitionAnimation: Transition, payload: Bundle? = null) {
     goToActivity(activity, transitionAnimation, null)
 }
 
