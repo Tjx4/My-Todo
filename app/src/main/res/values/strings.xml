@@ -6,4 +6,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_item">Add item</string>
     <string name="save_item">Save item</string>
+    <string name="you_have_no_todo_items">You have no todo items</string>
 </resources>
