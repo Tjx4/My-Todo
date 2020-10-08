@@ -51,7 +51,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
         override fun onLongClick(view: View): Boolean {
             todoItemLongClickListener?.onServiceCategoryLongClick(view, adapterPosition)
-            return false
+            return true
         }
 
     }
