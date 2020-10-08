@@ -11,8 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class TodoItemsTable (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id:Long = 0L,
-
+    var id:Int = 0,
     @ColumnInfo(name = "title")
     var title:String? = null,
     @ColumnInfo(name = "description")
