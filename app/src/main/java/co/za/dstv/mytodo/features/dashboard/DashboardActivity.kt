@@ -1,6 +1,7 @@
 package co.za.dstv.mytodo.features.dashboard
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -126,5 +127,13 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true)
+            return super.onKeyDown(keyCode, event)
+        }
+
+        return true
+    }
 
 }
