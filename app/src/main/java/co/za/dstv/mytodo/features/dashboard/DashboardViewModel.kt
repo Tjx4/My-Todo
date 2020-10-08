@@ -51,6 +51,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
     init {
         _newItem.value = TodoItem()
+        _checkList.value = ArrayList()
         setTodoItems()
 _todoProgress.value = 70
     }

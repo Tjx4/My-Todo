@@ -10,7 +10,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
+import co.za.dstv.mytodo.extensions.FADE_IN_ACTIVITY
+import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
+import co.za.dstv.mytodo.extensions.navigateToActivity
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
+import co.za.dstv.mytodo.features.item.ItemViewActivity
 import co.za.dstv.mytodo.models.TodoItem
 
 
@@ -41,6 +45,11 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         }
 
         rowView.setOnClickListener() {
+            if(dashboardActivity.dashboardViewModel.checkList.value.isNullOrEmpty()){
+                dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY)
+                return@setOnClickListener
+            }
+
             val item = dashboardActivity.dashboardViewModel?.todoItems?.value?.get(position)
             Toast.makeText(dashboardActivity, "${item?.title}", Toast.LENGTH_LONG).show()
 
