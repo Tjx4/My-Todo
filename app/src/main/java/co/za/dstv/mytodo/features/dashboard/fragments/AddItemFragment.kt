@@ -68,6 +68,11 @@ class AddItemFragment : BaseDialogFragment() {
         dashboardActivity = context as DashboardActivity
     }
 
+    override fun onActivityCreated(arg0: Bundle?) {
+        super.onActivityCreated(arg0)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+    }
+
     companion object {
         fun newInstance(): BaseDialogFragment {
             val addItemFragment = AddItemFragment()
