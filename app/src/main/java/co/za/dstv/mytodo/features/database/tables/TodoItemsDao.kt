@@ -21,9 +21,6 @@ interface TodoItemsDao {
     fun getLastItem(): TodoItemsTable?
 
     @Query("SELECT * FROM todo_items ORDER BY id DESC")
-    fun getAllItemsLiveData(): LiveData<List<TodoItemsTable>>
-
-    @Query("SELECT * FROM todo_items ORDER BY id DESC")
     fun getAllItems():List<TodoItemsTable>?
 
     @Query("DELETE  FROM todo_items")

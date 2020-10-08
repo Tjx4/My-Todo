@@ -45,6 +45,15 @@
     <style name="MediumDarkTextView" parent="MediumTextView">
         <item name="android:textColor">@color/darkText</item>
     </style>
+    <style name="SmallTextView" parent="BaseTextView">
+        <item name="android:textSize">@dimen/small_text</item>
+        <item name="android:gravity">left</item>
+    </style>
+    <style name="SmallDarkTextView" parent="SmallTextView">
+        <item name="android:textColor">@color/darkText</item>
+    </style>
+
+
     <style name="DarkEditText">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:ems">10</item>

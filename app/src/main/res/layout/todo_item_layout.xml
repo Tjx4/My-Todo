@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_border"
         android:padding="@dimen/small_padding">
 
         <TextView
@@ -24,12 +25,28 @@
         <TextView
             android:id="@+id/tvDescription"
             style="@style/MediumDarkTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="left"
             tools:text="Todo item description"
+            android:layout_marginRight="@dimen/small_margin"
             app:layout_constraintRight_toLeftOf="@+id/cbDone"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvDueDate"
+            style="@style/SmallDarkTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="@color/lightGreyText"
+            tools:text="Todo item description"
+            android:layout_marginRight="@dimen/small_margin"
+            app:layout_constraintRight_toLeftOf="@+id/cbDone"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescription"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatCheckBox

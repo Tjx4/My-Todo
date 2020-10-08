@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:top="-5dp" android:left="-5dp" android:right="-5dp">
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:color="@color/darkBackground" android:width="0dp"/>
+        </shape>
+    </item>
+
+    <item android:top="-5dp" android:bottom="-5dp" android:right="-5dp">
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:color="@android:color/holo_blue_dark" android:width="0dp"/>
+        </shape>
+    </item>
+
+    <item android:bottom="-5dp" android:left="-5dp" android:right="-5dp">
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:color="@color/lightText" android:width="1dp"/>
+        </shape>
+    </item>
+
+    <item android:top="-5dp" android:left="-5dp" android:bottom="-5dp">
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:color="@android:color/holo_red_dark" android:width="0dp"/>
+        </shape>
+    </item>
+
+    <item android:bottom="2dp" android:left="5dp" android:right="5dp" android:top="2dp">
+        <shape>
+            <solid android:color="@color/lightBackground"/>
+
+            <corners android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp" />
+        </shape>
+    </item>
+</layer-list>

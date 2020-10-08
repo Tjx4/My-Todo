@@ -26,11 +26,13 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         holder.titleTv.text = todoItem.title
         holder.descriptionTv.text = todoItem.description
         holder.doneCb.isChecked = todoItem.complete
+        holder.dueDateTv.text = "Due on ${todoItem.dueDate}"
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
+        internal var dueDateTv = itemView.findViewById<TextView>(R.id.tvDueDate)
         internal var doneCb = itemView.findViewById<CheckBox>(R.id.cbDone)
 
         init {

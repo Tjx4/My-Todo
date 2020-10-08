@@ -68,7 +68,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     override fun onServiceCategoryClick(view: View, position: Int) {
-        TODO("Not yet implemented")
+      val item = dashboardViewModel?.todoItems?.value?.get(position)
+        Toast.makeText(this, "${item?.title}", Toast.LENGTH_LONG).show()
     }
 
     private fun onShowLoading(isBusy: Boolean) {

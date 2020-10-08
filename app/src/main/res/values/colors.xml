@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#111</color>
     <color name="colorAccent">#0088cc</color>
     <color name="darkGrey">#CCC</color>
-    <color name="lightGreyText">#aaa</color>
+    <color name="lightGreyText">#999</color>
     <color name="lightText">#DDD</color>
     <color name="darkText">#111</color>
     <color name="lightBackground">#FFF</color>

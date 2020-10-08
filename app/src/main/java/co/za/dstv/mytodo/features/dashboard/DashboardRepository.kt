@@ -11,7 +11,7 @@ class DashboardRepository(var database: TodoDb) {
     }
 
     suspend fun deleteItemFromDb(todoItem: TodoItem){
-        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description)
+        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description, todoItem.complete, todoItem.dateCreated, todoItem.dueDate)
         database.todoItemsDao.delete(todoItemsTable)
     }
 
@@ -24,4 +24,10 @@ class DashboardRepository(var database: TodoDb) {
 
         return todoItems
     }
+
+    suspend fun setItemAsComplete(todoItem: TodoItem){
+        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description, todoItem.complete, todoItem.dateCreated, todoItem.dueDate)
+        database.todoItemsDao.update(todoItemsTable)
+    }
+
 }
