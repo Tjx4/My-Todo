@@ -20,7 +20,7 @@ import co.za.dstv.mytodo.helpers.showSuccessAlert
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener {
+class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener , TodoItemAdapter.TodoItemLongClickListener {
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
@@ -51,11 +51,14 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
         val todRvLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        todRvLayoutManager.initialPrefetchItemCount = todoItems.size //???
         rvItems?.layoutManager = todRvLayoutManager
 
+
+        todRvLayoutManager.initialPrefetchItemCount = todoItems.size
+
         val todoItemAdapter = TodoItemAdapter(this, todoItems)
-        todoItemAdapter.setLocationClickListener(this)
+        todoItemAdapter.setTodoClickListener(this)
+        todoItemAdapter.setTodoLongClickListener(this)
         rvItems.adapter = todoItemAdapter
 
         rvItems.visibility = View.VISIBLE
@@ -70,6 +73,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onServiceCategoryClick(view: View, position: Int) {
       val item = dashboardViewModel?.todoItems?.value?.get(position)
         Toast.makeText(this, "${item?.title}", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onServiceCategoryLongClick(view: View, position: Int) {
+        val item = dashboardViewModel?.todoItems?.value?.get(position)
+        Toast.makeText(this, "Long click == ${item?.title}", Toast.LENGTH_LONG).show()
     }
 
     private fun onShowLoading(isBusy: Boolean) {
@@ -98,5 +106,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }
+
 
 }
