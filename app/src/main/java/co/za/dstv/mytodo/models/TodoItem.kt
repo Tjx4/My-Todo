@@ -9,7 +9,7 @@ data class TodoItem (
       var id: Int = 0,
       var title: String? = null,
       var description: String? = null,
-      var complete: Boolean? = null,
+      var complete: Boolean = false,
       var dateCreated: Date? = null,
       var dueDate: Date? = null
 ): Parcelable

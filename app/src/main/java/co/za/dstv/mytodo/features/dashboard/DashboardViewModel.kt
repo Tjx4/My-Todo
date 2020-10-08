@@ -19,6 +19,10 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     val showContent: MutableLiveData<Boolean>
         get() = _showContent
 
+    private val _isNoItems: MutableLiveData<Boolean> = MutableLiveData()
+    val isNoItems: MutableLiveData<Boolean>
+        get() = _isNoItems
+
     private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
     val isItemAdded: MutableLiveData<Boolean>
         get() = _isItemAdded
@@ -29,37 +33,56 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
 
     var busyMessage: String = "Please wait..."
 
-    private val _todoItem: MutableLiveData<TodoItem> = MutableLiveData()
-    val todoItem: MutableLiveData<TodoItem>
-        get() = _todoItem
+    private val _newItem: MutableLiveData<TodoItem> = MutableLiveData()
+    val newItem: MutableLiveData<TodoItem>
+        get() = _newItem
+
+    private var _todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
+    var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
+        get() = _todoItems
 
     private var _errorMessage: MutableLiveData<String> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
         get() = _errorMessage
 
-
     init {
-        _todoItem.value = TodoItem()
+        _newItem.value = TodoItem()
+        setTodoItems()
 _todoProgress.value = 70
     }
 
     fun setDueDate(selectedDate: Date){
-        _todoItem.value?.dueDate = selectedDate
+        _newItem.value?.dueDate = selectedDate
+    }
+
+    fun setTodoItems(){
+        ioScope.launch {
+            val todoItems = dashboardRepository.getItemsFromDb()
+            uiScope.launch {
+
+                if(todoItems.isNullOrEmpty()){
+                    _isNoItems.value = true
+                }
+                else{
+                    _todoItems.value = todoItems
+                }
+            }
+        }
     }
 
     fun checkAndAddItem(){
-        if(!checkIsValidTitle(_todoItem.value?.title)){
+        if(!checkIsValidTitle(_newItem.value?.title)){
             _errorMessage.value = "Please enter a valid title"
             return
         }
 
-        if(!checkIsValidDescription(_todoItem.value?.description)){
+        if(!checkIsValidDescription(_newItem.value?.description)){
             _errorMessage.value = "Please enter a minimum of 10 characters for your description"
             return
         }
 
         ioScope.launch {
-            _todoItem.value?.dateCreated = Date()
+            _newItem.value?.dateCreated = Date()
             addItem()
 
             uiScope.launch {
@@ -69,11 +92,11 @@ _todoProgress.value = 70
     }
 
     suspend fun addItem(){
-        dashboardRepository.addItemToDb(_todoItem.value!!)
+        dashboardRepository.addItemToDb(_newItem.value!!)
     }
 
     suspend fun deleteItem(){
-        dashboardRepository.deleteItemFromDb(_todoItem.value!!)
+        dashboardRepository.deleteItemFromDb(_newItem.value!!)
     }
 
     fun checkIsValidTitle(title: String?): Boolean {

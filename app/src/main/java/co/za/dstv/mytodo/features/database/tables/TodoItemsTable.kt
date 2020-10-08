@@ -18,7 +18,7 @@ data class TodoItemsTable (
     @ColumnInfo(name = "description")
     var description:String? = null,
     @ColumnInfo(name = "complete")
-    var complete:Boolean? = false,
+    var complete:Boolean = false,
     @ColumnInfo(name = "dateCreated")
     var dateCreated: Date? = null,
     @ColumnInfo(name = "dueDate")

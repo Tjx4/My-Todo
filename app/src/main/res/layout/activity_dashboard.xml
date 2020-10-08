@@ -27,7 +27,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             android:background="@color/greyBackground">
 
             <TextView
-                android:id="@+id/tvHeading"
+                android:id="@+id/tvTitle"
                 style="@style/XLargeDarkTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,26 +44,26 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:layout_height="wrap_content"
                 android:text="@string/progress"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintTop_toBottomOf="@+id/tvHeading"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
             <SeekBar
                 style="@style/ProgressBarStyle"
                 android:layout_width="0dp"
                 android:layout_height="4dp"
-                android:min="0"
-                android:progress="@={dashboardViewModel.todoProgress}"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                android:layout_marginRight="@dimen/xsmall_margin"
                 android:max="100"
-                android:progressBackgroundTint="@color/darkGrey"
-                android:progressTint="@color/colorAccent"
+                android:min="0"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                android:layout_marginRight="@dimen/xsmall_margin"
-                android:layout_marginTop="@dimen/xsmall_margin"
+                android:progress="@={dashboardViewModel.todoProgress}"
+                android:progressBackgroundTint="@color/darkGrey"
+                android:progressTint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/tvProgressPcnt"
-                app:layout_constraintTop_toBottomOf="@+id/tvDescription"
-                app:layout_constraintBottom_toBottomOf="@+id/tvProgressPcnt"/>
+                app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 
             <TextView
                 android:id="@+id/tvProgressPcnt"

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import co.za.dstv.mytodo.R
+import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
@@ -16,6 +16,7 @@ import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
 import co.za.dstv.mytodo.helpers.showDialogFragment
 import co.za.dstv.mytodo.helpers.showLoadingDialog
 import co.za.dstv.mytodo.helpers.showSuccessAlert
+import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardActivity : BaseParentActivity() {
@@ -43,11 +44,23 @@ class DashboardActivity : BaseParentActivity() {
         dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
+        dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
+        dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
+    }
+
+    private fun onTodoItemsSet(todoItems: List<TodoItem>) {
+        val todoItemAdapter = TodoItemAdapter(this, todoItems)
+        rvItems.adapter = todoItemAdapter
+        tvNoItems.visibility = View.GONE
     }
 
     private fun onShowLoading(isBusy: Boolean) {
         clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
+    }
+
+    private fun onNoItems(isNoItems: Boolean) {
+        tvNoItems.visibility = View.VISIBLE
     }
 
     private fun onShowContent(showContent: Boolean) {
