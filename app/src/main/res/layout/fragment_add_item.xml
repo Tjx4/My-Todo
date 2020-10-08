@@ -8,78 +8,120 @@
             type="co.za.dstv.mytodo.features.dashboard.DashboardViewModel"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".features.dashboard.fragments.AddItemFragment"
-        android:paddingBottom="@dimen/large_padding"
-        android:background="@color/lightBackground">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTopBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            tools:context=".features.dashboard.fragments.AddItemFragment"
+            android:paddingBottom="@dimen/large_padding"
+            android:background="@color/lightBackground">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTopBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    style="@style/MediumDarkTextView"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Add item details"
+                    android:paddingLeft="@dimen/small_padding"
+                    android:paddingRight="@dimen/large_padding"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <ImageButton
+                    android:id="@+id/imgBCloseSaveLocationList"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:padding="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_close_dark"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/txtItemName"
+                style="@style/DarkEditText"
+                android:hint="Title"
+                android:text="@={dashboardViewModel.todoItem.title}"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                app:layout_constraintTop_toBottomOf="@+id/clTopBanner"/>
+
+            <EditText
+                android:id="@+id/txtItemDescription"
+                style="@style/DarkEditText"
+                android:hint="Description"
+                android:text="@={dashboardViewModel.todoItem.description}"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:gravity="top|left"
+                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                app:layout_constraintTop_toBottomOf="@+id/txtItemName"/>
 
             <TextView
+                android:id="@+id/tvDuedate"
                 style="@style/MediumDarkTextView"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="Add item details"
-                android:paddingLeft="@dimen/small_padding"
-                android:paddingRight="@dimen/large_padding"
+                android:layout_width="wrap_content"
+                android:text="Set due date and time"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginHorizontal="@dimen/medium_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageButton
-                android:id="@+id/imgBCloseSaveLocationList"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:padding="8dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_close_dark"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/txtItemDescription"/>
+
+            <DatePicker
+                android:id="@+id/dpDueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDuedate" />
+
+            <TimePicker
+                android:id="@+id/tpDueTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleY="0.8"
+                android:scaleX="0.8"
+                android:layout_weight="20"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dpDueDate"/>
+
+            <Button
+                style="@style/TodoButton"
+                android:layout_width="match_parent"
+                android:id="@+id/btnSignIn"
+                android:text="@string/save_item"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                app:layout_constraintTop_toBottomOf="@+id/tpDueTime" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <EditText
-            android:id="@+id/txtItemName"
-            style="@style/DarkEditText"
-            android:hint="Title"
-            android:text="@={dashboardViewModel.itemTitle}"
-            android:singleLine="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            app:layout_constraintTop_toBottomOf="@+id/clTopBanner"/>
+    </ScrollView>
 
-        <EditText
-            android:id="@+id/txtItemDescription"
-            style="@style/DarkEditText"
-            android:hint="Description"
-            android:text="@={dashboardViewModel.itemDescription}"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:gravity="top|left"
-            android:layout_marginTop="@dimen/small_margin"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            app:layout_constraintTop_toBottomOf="@+id/txtItemName"/>
-
-        <Button
-            style="@style/TodoButton"
-            android:layout_width="match_parent"
-            android:id="@+id/btnSignIn"
-            android:text="@string/save_item"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            app:layout_constraintTop_toBottomOf="@+id/txtItemDescription" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

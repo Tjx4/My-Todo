@@ -3,6 +3,8 @@ package co.za.dstv.mytodo.features.dashboard
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
+import co.za.dstv.mytodo.models.TodoItem
+import java.util.*
 
 class DashboardViewModel(application: Application, val dashboardRepository: DashboardRepository) : BaseVieModel(application) {
 
@@ -22,18 +24,29 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     val todoProgressPcnt: MutableLiveData<String>
         get() = _todoProgressPcnt
 
-    private val _itemTitle: MutableLiveData<String> = MutableLiveData()
-    val itemTitle: MutableLiveData<String>
-        get() = _itemTitle
+    var busyMessage: String = "Please wait..."
 
-    private val _itemDescription: MutableLiveData<String> = MutableLiveData()
-    val itemDescription: MutableLiveData<String>
-        get() = _itemDescription
+    private val _todoItem: MutableLiveData<TodoItem> = MutableLiveData()
+    val todoItem: MutableLiveData<TodoItem>
+        get() = _todoItem
 
-    var busyMessage: String = ""
 
     init {
-        _todoProgress.value = 70
-        _todoProgressPcnt.value = "${_todoProgress.value}%"
+_todoProgress.value = 70
+_todoProgressPcnt.value = "${_todoProgress.value}%"
+    }
+
+
+    fun setDateTime(selectedDate: Date){
+        _todoItem.value?.dueDate = selectedDate
+    }
+
+    fun checkAndAddItem(){
+
+
+    }
+
+    fun addItem(todoItem: TodoItem){
+
     }
 }
