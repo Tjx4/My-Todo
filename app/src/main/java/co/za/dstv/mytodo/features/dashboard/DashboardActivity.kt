@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
+import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
 import co.za.dstv.mytodo.helpers.showDialogFragment
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class DashboardActivity : BaseParentActivity() {
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var addItemFragment: BaseDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +56,9 @@ class DashboardActivity : BaseParentActivity() {
     }
 
     private fun onItemAdded(showContent: Boolean) {
-        showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok))
+        showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
+            addItemFragment.dismiss()
+        }
     }
 
     private fun onError(errorMessage: String) {
@@ -61,7 +66,7 @@ class DashboardActivity : BaseParentActivity() {
     }
 
     fun onAddButtonClicked(view: View){
-        var addItemFragment = AddItemFragment.newInstance()
+        addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }

@@ -9,5 +9,6 @@
     <color name="darkText">#111</color>
     <color name="lightBackground">#FFF</color>
     <color name="greyBackground">#EEE</color>
+    <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
 </resources>
