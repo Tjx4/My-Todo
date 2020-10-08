@@ -49,12 +49,12 @@ _todoProgress.value = 70
 
     fun checkAndAddItem(){
         if(!checkIsValidTitle(_todoItem.value?.title)){
-            errorMessage.value = "Please enter a valid title"
+            _errorMessage.value = "Please enter a valid title"
             return
         }
 
         if(!checkIsValidDescription(_todoItem.value?.description)){
-            errorMessage.value = "Please enter a minimum of 10 characters"
+            _errorMessage.value = "Please enter a minimum of 10 characters for your description"
             return
         }
 

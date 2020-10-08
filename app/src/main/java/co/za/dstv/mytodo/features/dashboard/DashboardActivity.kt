@@ -13,6 +13,7 @@ import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
 import co.za.dstv.mytodo.helpers.showDialogFragment
 import co.za.dstv.mytodo.helpers.showLoadingDialog
+import co.za.dstv.mytodo.helpers.showSuccessAlert
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardActivity : BaseParentActivity() {
@@ -37,6 +38,7 @@ class DashboardActivity : BaseParentActivity() {
     private fun addObservers() {
         dashboardViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })
+        dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
     }
 
@@ -51,7 +53,11 @@ class DashboardActivity : BaseParentActivity() {
     }
 
     private fun onItemAdded(showContent: Boolean) {
-        Toast.makeText(this, "Item saved successfully", Toast.LENGTH_LONG).show()
+        showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok))
+    }
+
+    private fun onError(errorMessage: String) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
     }
 
     fun onAddButtonClicked(view: View){
