@@ -75,7 +75,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         Toast.makeText(this, "${item?.title}", Toast.LENGTH_LONG).show()
     }
 
+    //Todo: Fixed long and short click bug
     override fun onServiceCategoryLongClick(view: View, position: Int) {
+        //Add to check list
         val item = dashboardViewModel?.todoItems?.value?.get(position)
         Toast.makeText(this, "Long click == ${item?.title}", Toast.LENGTH_LONG).show()
     }
