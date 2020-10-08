@@ -87,6 +87,7 @@ _todoProgress.value = 70
 
             uiScope.launch {
                 _isItemAdded.value = true
+                _newItem.value = TodoItem()
             }
         }
     }

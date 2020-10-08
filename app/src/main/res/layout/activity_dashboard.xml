@@ -58,9 +58,9 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:progress="@={dashboardViewModel.todoProgress}"
-                android:progressBackgroundTint="@color/darkGrey"
+                android:progressBackgroundTint="@color/progressBackground"
                 android:progressTint="@color/colorAccent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/tvProgressPcnt"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/tvProgressPcnt"
                 app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
