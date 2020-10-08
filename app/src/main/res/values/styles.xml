@@ -51,7 +51,7 @@
         <item name="android:textColorHint">@color/lightGreyText</item>
         <item name="android:textColor">@color/darkText</item>
         <item name="android:background">@drawable/edittext_background</item>
-        <item name="android:padding">@dimen/medium_padding</item>
+        <item name="android:padding">@dimen/small_padding</item>
     </style>
     <style name="TodoButton">
         <item name="android:layout_width">match_parent</item>
