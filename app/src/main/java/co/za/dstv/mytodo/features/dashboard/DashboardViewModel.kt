@@ -19,6 +19,10 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     val showContent: MutableLiveData<Boolean>
         get() = _showContent
 
+    private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
+    val isItemAdded: MutableLiveData<Boolean>
+        get() = _isItemAdded
+
     private val _todoProgress: MutableLiveData<Int> = MutableLiveData()
     var todoProgress: MutableLiveData<Int> = MutableLiveData()
         get() = _todoProgress
@@ -39,6 +43,8 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
 
 
     init {
+        _todoItem.value = TodoItem()
+
 _todoProgress.value = 70
 _todoProgressPcnt.value = "${_todoProgress.value}%"
     }
@@ -60,21 +66,20 @@ _todoProgressPcnt.value = "${_todoProgress.value}%"
 
         ioScope.launch {
             _todoItem.value?.dateCreated = Date()
+            addItem()
 
             uiScope.launch {
-
+                _isItemAdded.value = true
             }
         }
-
-
     }
 
-    fun addItem(todoItem: TodoItem){
-        dashboardRepository.addItemToDb(todoItem)
+    suspend fun addItem(){
+        dashboardRepository.addItemToDb(_todoItem.value!!)
     }
 
-    fun deleteItem(todoItem: TodoItem){
-        dashboardRepository.deleteItemFromDb(todoItem)
+    suspend fun deleteItem(){
+        dashboardRepository.deleteItemFromDb(_todoItem.value!!)
     }
 
     fun checkIsValidTitle(title: String?): Boolean {

@@ -2,6 +2,7 @@ package co.za.dstv.mytodo.features.dashboard
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -36,6 +37,7 @@ class DashboardActivity : BaseParentActivity() {
     private fun addObservers() {
         dashboardViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })
+        dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
     }
 
     private fun onShowLoading(isBusy: Boolean) {
@@ -46,6 +48,10 @@ class DashboardActivity : BaseParentActivity() {
     private fun onShowContent(showContent: Boolean) {
         hideCurrentLoadingDialog(this)
         clCParent.visibility = View.VISIBLE
+    }
+
+    private fun onItemAdded(showContent: Boolean) {
+        Toast.makeText(this, "Item saved successfully", Toast.LENGTH_LONG).show()
     }
 
     fun onAddButtonClicked(view: View){

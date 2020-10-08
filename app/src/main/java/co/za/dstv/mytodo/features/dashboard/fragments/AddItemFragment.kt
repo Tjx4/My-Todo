@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
@@ -19,6 +20,7 @@ class AddItemFragment : BaseDialogFragment() {
     private var dashboardActivity: DashboardActivity? = null
      lateinit var binding: FragmentAddItemBinding
      lateinit var closeSaveLocationListImgB: ImageButton
+     lateinit var signInBtn: Button
      lateinit var dueDateDp: DatePicker
 
     override fun onCreateView(
@@ -53,6 +55,11 @@ class AddItemFragment : BaseDialogFragment() {
         closeSaveLocationListImgB = parentView.findViewById(R.id.imgBCloseSaveLocationList)
         closeSaveLocationListImgB.setOnClickListener {
             dismiss()
+        }
+
+        signInBtn = parentView.findViewById(R.id.btnSignIn)
+        signInBtn.setOnClickListener {
+            dashboardActivity?.dashboardViewModel?.checkAndAddItem()
         }
     }
 

@@ -112,8 +112,8 @@
 
             <Button
                 style="@style/TodoButton"
-                android:layout_width="match_parent"
                 android:id="@+id/btnSignIn"
+                android:layout_width="match_parent"
                 android:text="@string/save_item"
                 android:layout_marginTop="@dimen/medium_margin"
                 android:layout_marginHorizontal="@dimen/medium_margin"
