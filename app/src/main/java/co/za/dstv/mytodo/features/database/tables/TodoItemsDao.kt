@@ -15,7 +15,7 @@ interface TodoItemsDao {
     fun delete(todoItemsTable: TodoItemsTable)
 
     @Query("SELECT * FROM todo_items WHERE id = :key")
-    fun get(key: Long): TodoItemsTable?
+    fun get(key: Int): TodoItemsTable?
 
     @Query("SELECT * FROM todo_items ORDER BY id DESC LIMIT 1")
     fun getLastItem(): TodoItemsTable?
