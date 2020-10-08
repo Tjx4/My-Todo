@@ -71,7 +71,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="30%"
-                android:text="@{dashboardViewModel.todoProgressPcnt}"
+                android:text="@{dashboardViewModel.todoProgress.toString() +`%`}"
                 app:layout_constraintLeft_toLeftOf="@+id/tvDone"
                 app:layout_constraintBottom_toTopOf="@+id/tvDone"/>
             

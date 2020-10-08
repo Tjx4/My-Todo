@@ -27,10 +27,6 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     var todoProgress: MutableLiveData<Int> = MutableLiveData()
         get() = _todoProgress
 
-    private val _todoProgressPcnt: MutableLiveData<String> = MutableLiveData()
-    val todoProgressPcnt: MutableLiveData<String>
-        get() = _todoProgressPcnt
-
     var busyMessage: String = "Please wait..."
 
     private val _todoItem: MutableLiveData<TodoItem> = MutableLiveData()
@@ -44,9 +40,7 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
 
     init {
         _todoItem.value = TodoItem()
-
 _todoProgress.value = 70
-_todoProgressPcnt.value = "${_todoProgress.value}%"
     }
 
     fun setDueDate(selectedDate: Date){
