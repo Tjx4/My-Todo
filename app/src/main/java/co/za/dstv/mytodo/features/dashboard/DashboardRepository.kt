@@ -6,7 +6,7 @@ import co.za.dstv.mytodo.models.TodoItem
 
 class DashboardRepository(var database: TodoDb) {
     suspend fun addItemToDb(todoItem: TodoItem){
-        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description)
+        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description, todoItem.complete ,todoItem.dateCreated, todoItem.dueDate)
         database.todoItemsDao.insert(todoItemsTable)
     }
 

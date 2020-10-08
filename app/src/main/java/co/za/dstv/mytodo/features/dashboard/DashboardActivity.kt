@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
@@ -19,7 +20,7 @@ import co.za.dstv.mytodo.helpers.showSuccessAlert
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashboardActivity : BaseParentActivity() {
+class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener {
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
@@ -49,18 +50,30 @@ class DashboardActivity : BaseParentActivity() {
     }
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
+        val todRvLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        todRvLayoutManager.initialPrefetchItemCount = todoItems.size //???
+        rvItems?.layoutManager = todRvLayoutManager
+
         val todoItemAdapter = TodoItemAdapter(this, todoItems)
+        todoItemAdapter.setLocationClickListener(this)
         rvItems.adapter = todoItemAdapter
+
+        rvItems.visibility = View.VISIBLE
         tvNoItems.visibility = View.GONE
+    }
+
+    private fun onNoItems(isNoItems: Boolean) {
+        rvItems.visibility = View.GONE
+        tvNoItems.visibility = View.VISIBLE
+    }
+
+    override fun onServiceCategoryClick(view: View, position: Int) {
+        TODO("Not yet implemented")
     }
 
     private fun onShowLoading(isBusy: Boolean) {
         clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
-    }
-
-    private fun onNoItems(isNoItems: Boolean) {
-        tvNoItems.visibility = View.VISIBLE
     }
 
     private fun onShowContent(showContent: Boolean) {
@@ -71,6 +84,7 @@ class DashboardActivity : BaseParentActivity() {
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             addItemFragment.dismiss()
+            dashboardViewModel.setTodoItems()
         }
     }
 
@@ -83,4 +97,5 @@ class DashboardActivity : BaseParentActivity() {
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }
+
 }

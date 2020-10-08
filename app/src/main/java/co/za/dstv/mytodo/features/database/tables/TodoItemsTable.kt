@@ -20,7 +20,7 @@ data class TodoItemsTable (
     @ColumnInfo(name = "complete")
     var complete:Boolean = false,
     @ColumnInfo(name = "dateCreated")
-    var dateCreated: Date? = null,
+    var dateCreated: String? = null,
     @ColumnInfo(name = "dueDate")
-    var dueDate: Date? = null,
+    var dueDate: String? = null,
 ): Parcelable

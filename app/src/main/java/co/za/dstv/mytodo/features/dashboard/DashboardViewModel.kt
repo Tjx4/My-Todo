@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import co.za.dstv.mytodo.extensions.isValidDescription
 import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
+import co.za.dstv.mytodo.helpers.getDateAndTime
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.coroutines.launch
-import java.util.*
 
-class DashboardViewModel(application: Application, val dashboardRepository: DashboardRepository) : BaseVieModel(application) {
+class DashboardViewModel(application: Application, private val dashboardRepository: DashboardRepository) : BaseVieModel(application) {
 
     private var _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
@@ -51,8 +51,8 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
 _todoProgress.value = 70
     }
 
-    fun setDueDate(selectedDate: Date){
-        _newItem.value?.dueDate = selectedDate
+    fun setDueDate(selectedDateTime: String){
+        _newItem.value?.dueDate = selectedDateTime
     }
 
     fun setTodoItems(){
@@ -82,7 +82,7 @@ _todoProgress.value = 70
         }
 
         ioScope.launch {
-            _newItem.value?.dateCreated = Date()
+            _newItem.value?.dateCreated = getDateAndTime()
             addItem()
 
             uiScope.launch {
