@@ -13,7 +13,6 @@ import co.za.dstv.mytodo.databinding.FragmentAddItemBinding
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import java.util.*
-import kotlin.time.minutes
 
 
 class AddItemFragment : BaseDialogFragment() {
@@ -48,7 +47,7 @@ class AddItemFragment : BaseDialogFragment() {
             var dd = "${year} ${correctMonth} ${dayOfMonth}"
             val selectedDate = Date()
             selectedDate.month = 9
-            dashboardActivity?.dashboardViewModel?.setDateTime(selectedDate)
+            dashboardActivity?.dashboardViewModel?.setDueDate(selectedDate)
         }
 
         closeSaveLocationListImgB = parentView.findViewById(R.id.imgBCloseSaveLocationList)

@@ -2,8 +2,11 @@ package co.za.dstv.mytodo.features.dashboard
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import co.za.dstv.mytodo.extensions.isValidDescription
+import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.models.TodoItem
+import kotlinx.coroutines.launch
 import java.util.*
 
 class DashboardViewModel(application: Application, val dashboardRepository: DashboardRepository) : BaseVieModel(application) {
@@ -30,23 +33,55 @@ class DashboardViewModel(application: Application, val dashboardRepository: Dash
     val todoItem: MutableLiveData<TodoItem>
         get() = _todoItem
 
+    private var _errorMessage: MutableLiveData<String> = MutableLiveData()
+    var errorMessage: MutableLiveData<String> = MutableLiveData()
+        get() = _errorMessage
+
 
     init {
 _todoProgress.value = 70
 _todoProgressPcnt.value = "${_todoProgress.value}%"
     }
 
-
-    fun setDateTime(selectedDate: Date){
+    fun setDueDate(selectedDate: Date){
         _todoItem.value?.dueDate = selectedDate
     }
 
     fun checkAndAddItem(){
+        if(!checkIsValidTitle(_todoItem.value?.title)){
+            errorMessage.value = "Please enter a valid title"
+            return
+        }
+
+        if(!checkIsValidDescription(_todoItem.value?.description)){
+            errorMessage.value = "Please enter a minimum of 10 characters"
+            return
+        }
+
+        ioScope.launch {
+            _todoItem.value?.dateCreated = Date()
+
+            uiScope.launch {
+
+            }
+        }
 
 
     }
 
     fun addItem(todoItem: TodoItem){
+        dashboardRepository.addItemToDb(todoItem)
+    }
 
+    fun deleteItem(todoItem: TodoItem){
+        dashboardRepository.deleteItemFromDb(todoItem)
+    }
+
+    fun checkIsValidTitle(title: String?): Boolean {
+        return title?.isValidTitle() ?: false
+    }
+
+    fun checkIsValidDescription(description: String?): Boolean {
+        return description?.isValidDescription() ?: false
     }
 }
