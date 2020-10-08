@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,6 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
-    private var todoItemLongClickListener: TodoItemLongClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.todo_item_layout, parent, false)
@@ -32,26 +32,37 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
         //Todo: check if over due
         holder.dueDateTv.text = "Due on ${todoItem.dueDate}"
+
+        val rowView: View = holder.itemView
+        rowView.setOnLongClickListener {
+            dashboardActivity.onItemSelected(it, position)
+            holder.checkedImg.visibility = View.VISIBLE
+            true
+        }
+
+        rowView.setOnClickListener() {
+            val item = dashboardActivity.dashboardViewModel?.todoItems?.value?.get(position)
+            Toast.makeText(dashboardActivity, "${item?.title}", Toast.LENGTH_LONG).show()
+
+            dashboardActivity.onItemDeSelected(it, position)
+            holder.checkedImg.visibility = View.GONE
+            true
+        }
     }
 
-    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
+    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
         internal var dueDateTv = itemView.findViewById<TextView>(R.id.tvDueDate)
         internal var doneCb = itemView.findViewById<CheckBox>(R.id.cbDone)
+        internal var checkedImg = itemView.findViewById<ImageView>(R.id.imgChecked)
 
         init {
             itemView.setOnClickListener(this)
-            itemView.setOnLongClickListener (this)
         }
 
         override fun onClick(view: View) {
             todoItemClickListener?.onServiceCategoryClick(view, adapterPosition)
-        }
-
-        override fun onLongClick(view: View): Boolean {
-            todoItemLongClickListener?.onServiceCategoryLongClick(view, adapterPosition)
-            return true
         }
 
     }
@@ -64,16 +75,8 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         fun onServiceCategoryClick(view: View, position: Int)
     }
 
-    interface TodoItemLongClickListener{
-        fun onServiceCategoryLongClick(view: View, position: Int)
-    }
-
     fun setTodoClickListener(todoItemClickListener: TodoItemClickListener) {
         this.todoItemClickListener = todoItemClickListener
-    }
-
-    fun setTodoLongClickListener(todoItemLongClickListener: TodoItemLongClickListener) {
-        this.todoItemLongClickListener = todoItemLongClickListener
     }
 
     override fun getItemCount() = todoItem.size

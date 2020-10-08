@@ -41,6 +41,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
         get() = _todoItems
 
+    private var _checkList: MutableLiveData<ArrayList<Int>> = MutableLiveData()
+    var checkList: MutableLiveData<ArrayList<Int>> = MutableLiveData()
+        get() = _checkList
+
     private var _errorMessage: MutableLiveData<String> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
         get() = _errorMessage
@@ -49,6 +53,14 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _newItem.value = TodoItem()
         setTodoItems()
 _todoProgress.value = 70
+    }
+
+    fun addToCheckList(index: Int){
+        _checkList.value?.add(index)
+    }
+
+    fun removeFromCheckList(index: Int){
+        _checkList.value?.remove(index)
     }
 
     fun setDueDate(selectedDateTime: String){

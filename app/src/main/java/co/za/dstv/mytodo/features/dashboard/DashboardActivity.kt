@@ -2,7 +2,10 @@ package co.za.dstv.mytodo.features.dashboard
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,7 +23,7 @@ import co.za.dstv.mytodo.helpers.showSuccessAlert
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener , TodoItemAdapter.TodoItemLongClickListener {
+class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener {
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
@@ -58,7 +61,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         val todoItemAdapter = TodoItemAdapter(this, todoItems)
         todoItemAdapter.setTodoClickListener(this)
-        todoItemAdapter.setTodoLongClickListener(this)
         rvItems.adapter = todoItemAdapter
 
         rvItems.visibility = View.VISIBLE
@@ -71,15 +73,30 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     override fun onServiceCategoryClick(view: View, position: Int) {
-      val item = dashboardViewModel?.todoItems?.value?.get(position)
-        Toast.makeText(this, "${item?.title}", Toast.LENGTH_LONG).show()
+
     }
 
-    //Todo: Fixed long and short click bug
-    override fun onServiceCategoryLongClick(view: View, position: Int) {
-        //Add to check list
-        val item = dashboardViewModel?.todoItems?.value?.get(position)
-        Toast.makeText(this, "Long click == ${item?.title}", Toast.LENGTH_LONG).show()
+    fun onItemSelected(view: View, position: Int) {
+        dashboardViewModel.addToCheckList(position)
+
+        val parent = view as CardView
+        val child = parent.getChildAt(0) as FrameLayout
+        val grandChild = child.getChildAt(0) as ConstraintLayout
+
+        grandChild.background = getDrawable(R.drawable.top_border_selected)
+
+        // val item = dashboardViewModel?.todoItems?.value?.get(position)
+        // Toast.makeText(this, "Long click == ${item?.title}", Toast.LENGTH_LONG).show()
+    }
+
+    fun onItemDeSelected(view: View, position: Int) {
+        dashboardViewModel.removeFromCheckList(position)
+
+        val parent = view as CardView
+        val child = parent.getChildAt(0) as FrameLayout
+        val grandChild = child.getChildAt(0) as ConstraintLayout
+
+        grandChild.background = getDrawable(R.drawable.top_border)
     }
 
     private fun onShowLoading(isBusy: Boolean) {
