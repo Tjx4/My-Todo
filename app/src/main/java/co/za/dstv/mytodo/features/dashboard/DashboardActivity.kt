@@ -14,7 +14,6 @@ import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
-import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
 import co.za.dstv.mytodo.helpers.showDialogFragment
@@ -29,6 +28,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private lateinit var addItemFragment: AddItemFragment
     private lateinit var todoItemAdapter: TodoItemAdapter
     private var deleteMenuItem: MenuItem? = null
+    private var priorityMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +72,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         val itemCount = dashboardViewModel.checkList.value?.size
         supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
         deleteMenuItem?.isVisible = true
+        priorityMenuItem?.isVisible = true
     }
 
     private fun onShowContent(showContent: Boolean) {
@@ -80,6 +81,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         supportActionBar?.title = getString(R.string.app_name)
         deleteMenuItem?.isVisible = false
+        priorityMenuItem?.isVisible = false
     }
 
     private fun onCheckListUpdated(items: MutableList<Int>) {
@@ -135,6 +137,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.dashboard_menu, menu)
         deleteMenuItem = menu.findItem(R.id.action_delette_item)
+        priorityMenuItem = menu.findItem(R.id.action_priority)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -142,6 +145,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         when (item.itemId) {
             R.id.action_delette_item -> {
                 dashboardViewModel.deleteSelectedItems()
+            }
+            R.id.action_priority -> {
+                dashboardViewModel.setPriorityOnSelectedItems()
             }
         }
         return super.onOptionsItemSelected(item)

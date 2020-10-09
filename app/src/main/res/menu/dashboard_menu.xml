@@ -3,10 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_priority"
+        android:icon="@drawable/ic_priority_light"
+        android:title="@string/delete"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_delette_item"
         android:icon="@drawable/ic_delete_light"
         android:title="@string/delete"
         android:visible="false"
         app:showAsAction="always"/>
+
+    <item
+        android:title="decoy"
+        android:visible="false"
+        android:enabled="false"
+        app:showAsAction="always"/>
+
+
 
 </menu>

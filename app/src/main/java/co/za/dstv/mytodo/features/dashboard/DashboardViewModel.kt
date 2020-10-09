@@ -183,6 +183,11 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     }
 
 
+    fun setPriorityOnSelectedItems(){
+
+    }
+
+
     fun checkIsValidTitle(title: String?): Boolean {
         return title?.isValidTitle() ?: false
     }
