@@ -4,10 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.extensions.FADE_IN_ACTIVITY
@@ -39,7 +38,13 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
         val rowView: View = holder.itemView
         rowView.setOnLongClickListener {
-            dashboardActivity.onItemSelected(it, position)
+            dashboardActivity.dashboardViewModel.addToCheckList(position)
+
+            val parent = it as CardView
+            val child = parent.getChildAt(0) as FrameLayout
+            val grandChild = child.getChildAt(0) as ConstraintLayout
+            grandChild.background =  dashboardActivity.getDrawable(R.drawable.top_border_selected)
+
             holder.checkedImg.visibility = View.VISIBLE
             true
         }
@@ -50,10 +55,13 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
                 return@setOnClickListener
             }
 
-            val item = dashboardActivity.dashboardViewModel?.todoItems?.value?.get(position)
-            Toast.makeText(dashboardActivity, "${item?.title}", Toast.LENGTH_LONG).show()
+            dashboardActivity.dashboardViewModel.removeFromCheckList(position)
 
-            dashboardActivity.onItemDeSelected(it, position)
+            val parent = it as CardView
+            val child = parent.getChildAt(0) as FrameLayout
+            val grandChild = child.getChildAt(0) as ConstraintLayout
+            grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
+
             holder.checkedImg.visibility = View.GONE
             true
         }

@@ -77,29 +77,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     }
 
-    fun onItemSelected(view: View, position: Int) {
-        dashboardViewModel.addToCheckList(position)
-
-        val parent = view as CardView
-        val child = parent.getChildAt(0) as FrameLayout
-        val grandChild = child.getChildAt(0) as ConstraintLayout
-
-        grandChild.background = getDrawable(R.drawable.top_border_selected)
-
-        // val item = dashboardViewModel?.todoItems?.value?.get(position)
-        // Toast.makeText(this, "Long click == ${item?.title}", Toast.LENGTH_LONG).show()
-    }
-
-    fun onItemDeSelected(view: View, position: Int) {
-        dashboardViewModel.removeFromCheckList(position)
-
-        val parent = view as CardView
-        val child = parent.getChildAt(0) as FrameLayout
-        val grandChild = child.getChildAt(0) as ConstraintLayout
-
-        grandChild.background = getDrawable(R.drawable.top_border)
-    }
-
     private fun onShowLoading(isBusy: Boolean) {
         clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
