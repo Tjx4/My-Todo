@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
-import co.za.dstv.mytodo.extensions.FADE_IN_ACTIVITY
 import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
 import co.za.dstv.mytodo.extensions.navigateToActivity
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
@@ -21,6 +23,8 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
+    private var selectedPos = RecyclerView.NO_POSITION
+    var allItems = ArrayList<View>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.todo_item_layout, parent, false)
@@ -28,43 +32,81 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        allItems.add(holder.itemView)
+
         val todoItem = todoItem[position]
         holder.titleTv.text = todoItem.title
         holder.descriptionTv.text = todoItem.description
         holder.doneCb.isChecked = todoItem.complete
-
         //Todo: check if over due
         holder.dueDateTv.text = "Due on ${todoItem.dueDate}"
 
-        val rowView: View = holder.itemView
-        rowView.setOnLongClickListener {
-            dashboardActivity.dashboardViewModel.addToCheckList(position)
+       // holder.itemView.isSelected = selectedPos == position
 
-            val parent = it as CardView
-            val child = parent.getChildAt(0) as FrameLayout
-            val grandChild = child.getChildAt(0) as ConstraintLayout
-            grandChild.background =  dashboardActivity.getDrawable(R.drawable.top_border_selected)
+        holder.itemView.setOnClickListener() {
+            holder.itemView.isSelected = selectedPos == position
+            selectedPos = holder.layoutPosition
 
-            holder.checkedImg.visibility = View.VISIBLE
-            true
-        }
+            val isEmptyCheckList = dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
-        rowView.setOnClickListener() {
-            if(dashboardActivity.dashboardViewModel.checkList.value.isNullOrEmpty()){
-                dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY)
-                return@setOnClickListener
+            if(holder.checkedImg.visibility != View.VISIBLE){
+                if(isEmptyCheckList){
+                    notifyItemChanged(selectedPos)
+                    dashboardActivity.navigateToActivity(ItemViewActivity::class.java,SLIDE_IN_ACTIVITY)
+                }
+                else{
+                    dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                    setItemSelected(it, holder)
+                }
+            }
+            else{
+                dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
+                deselectItem(it, holder)
             }
 
-            dashboardActivity.dashboardViewModel.removeFromCheckList(position)
+        }
 
-            val parent = it as CardView
-            val child = parent.getChildAt(0) as FrameLayout
-            val grandChild = child.getChildAt(0) as ConstraintLayout
-            grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
+        holder.itemView.setOnLongClickListener {
+            holder.itemView.isSelected =  selectedPos == position
+            selectedPos = holder.layoutPosition
 
-            holder.checkedImg.visibility = View.GONE
+            if(holder.checkedImg.visibility != View.VISIBLE){
+                dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                setItemSelected(it, holder)
+            }
+            else{
+                notifyItemChanged(selectedPos)
+                dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
+                deselectItem(it, holder)
+            }
+
             true
         }
+
+    }
+
+    private fun deselectItem(
+        it: View?,
+        holder: ViewHolder
+    ) {
+        val parent = it as CardView
+        val child = parent.getChildAt(0) as FrameLayout
+        val grandChild = child.getChildAt(0) as ConstraintLayout
+        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
+        holder.checkedImg.visibility = View.GONE
+        holder.itemView.isSelected = false
+    }
+
+    private fun setItemSelected(
+        it: View?,
+        holder: ViewHolder
+    ) {
+        val parent = it as CardView
+        val child = parent.getChildAt(0) as FrameLayout
+        val grandChild = child.getChildAt(0) as ConstraintLayout
+        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
+        holder.checkedImg.visibility = View.VISIBLE
+        holder.itemView.isSelected = true
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

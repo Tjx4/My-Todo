@@ -53,15 +53,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
         setTodoItems()
+
 _todoProgress.value = 70
-    }
-
-    fun addToCheckList(index: Int){
-        _checkList.value?.add(index)
-    }
-
-    fun removeFromCheckList(index: Int){
-        _checkList.value?.remove(index)
     }
 
     fun setDueDate(selectedDateTime: String){

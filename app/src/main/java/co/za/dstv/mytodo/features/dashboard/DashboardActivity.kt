@@ -105,8 +105,17 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        val isEmptyCheckList = dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true)
+            if (isEmptyCheckList) {
+                moveTaskToBack(true)
+                return super.onKeyDown(keyCode, event)
+            }
+            else{
+                dashboardViewModel.checkList.value?.clear()
+                //Unselect all
+            }
+
             return super.onKeyDown(keyCode, event)
         }
 
