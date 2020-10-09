@@ -20,7 +20,6 @@ import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.features.item.ItemViewActivity
 import co.za.dstv.mytodo.models.TodoItem
 
-
 class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) : RecyclerView.Adapter<TodoItemAdapter.ViewHolder>() {
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)

@@ -48,6 +48,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         iniViews()
     }
 
+    override fun onResume() {
+        super.onResume()
+        dashboardViewModel.displayTodoItems()
+    }
+
     private fun addObservers() {
         dashboardViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })

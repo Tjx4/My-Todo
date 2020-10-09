@@ -69,23 +69,5 @@ class DashboardRepository(var database: TodoDb) {
         return todoItems
     }
 
-    suspend fun setItemAsComplete(items : List<TodoItem?>): DbOperationResult{
-        return try {
-            val priorityItemList = arrayListOf<TodoItemsTable>()
-
-            items.forEach {
-                if(it != null){
-                    val todoItemsTable = TodoItemsTable(it.id, it.title, it.description, true, !it.priority, it.dateCreated, it.dueDate)
-                    priorityItemList.add(todoItemsTable)
-                }
-            }
-            database.todoItemsDao.update(priorityItemList)
-
-            return DbOperationResult(true)
-        }
-        catch (ex: Exception){
-            return DbOperationResult(false)
-        }
-    }
 
 }
