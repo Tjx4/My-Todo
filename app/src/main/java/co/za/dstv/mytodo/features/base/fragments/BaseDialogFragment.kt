@@ -28,8 +28,8 @@ abstract class BaseDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        params.width = ActionBar.LayoutParams.MATCH_PARENT
-        params.height = ActionBar.LayoutParams.WRAP_CONTENT
+        params.width = WindowManager.LayoutParams.MATCH_PARENT
+        params.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog!!.window!!.attributes = params as WindowManager.LayoutParams
     }
 

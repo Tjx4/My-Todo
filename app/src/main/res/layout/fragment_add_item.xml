@@ -8,24 +8,33 @@
             type="co.za.dstv.mytodo.features.dashboard.DashboardViewModel"/>
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/lightBackground"
+        android:background="@android:color/transparent"
         tools:context=".features.dashboard.fragments.AddItemFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:background="@android:color/transparent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTopBanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@color/lightBackground">
 
                 <TextView
                     style="@style/MediumDarkTextView"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="Add item details"
+                    android:text="Create a new todo item"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/medium_plus_text"
                     android:paddingLeft="@dimen/small_padding"
                     android:paddingRight="@dimen/large_padding"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -47,14 +56,10 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/clTopBanner">
-
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/clTopBanner">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -89,10 +94,11 @@
                     <TextView
                         android:id="@+id/tvDuedate"
                         style="@style/MediumDarkTextView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
+                        android:background="@color/greyBackground"
+                        android:padding="@dimen/small_padding"
                         android:text="Set due date and time"
-                        android:layout_marginTop="@dimen/medium_margin"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
+                        android:layout_marginTop="@dimen/large__margin"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtItemDescription"/>
@@ -133,8 +139,8 @@
 
             </ScrollView>
 
-        </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
 
-    </LinearLayout>
 
 </layout>

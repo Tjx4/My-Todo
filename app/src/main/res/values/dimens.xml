@@ -11,6 +11,7 @@
     <dimen name="xlarge_text">26sp</dimen>
     <dimen name="large_text">22sp</dimen>
     <dimen name="medium_text">15sp</dimen>
+    <dimen name="medium_plus_text">18sp</dimen>
     <dimen name="small_text">12sp</dimen>
     <dimen name="xsmall_text">9sp</dimen>
 </resources>

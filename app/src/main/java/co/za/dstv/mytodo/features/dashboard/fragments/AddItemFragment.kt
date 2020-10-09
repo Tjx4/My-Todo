@@ -1,5 +1,6 @@
 package co.za.dstv.mytodo.features.dashboard.fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class AddItemFragment : BaseDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_item, container, false)
         binding.lifecycleOwner = this
         binding.dashboardViewModel = dashboardActivity?.dashboardViewModel
