@@ -24,6 +24,7 @@ class AddItemFragment : BaseDialogFragment() {
      lateinit var closeSaveLocationListImgB: ImageButton
      lateinit var signInBtn: Button
      lateinit var dueDateDp: DatePicker
+     lateinit var errorContainer: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +41,8 @@ class AddItemFragment : BaseDialogFragment() {
     }
 
     private fun initViews(parentView: View) {
+        errorContainer = parentView.findViewById(R.id.clErrorContainer)
+
         dueDateDp = parentView.findViewById(R.id.dpDueDate)
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
@@ -77,7 +80,7 @@ class AddItemFragment : BaseDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): BaseDialogFragment {
+        fun newInstance(): AddItemFragment {
             val addItemFragment = AddItemFragment()
             var payload = Bundle()
             //payload.putString(TITLE, title)

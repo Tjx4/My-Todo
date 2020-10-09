@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickListener {
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
-    private lateinit var addItemFragment: BaseDialogFragment
+    private lateinit var addItemFragment: AddItemFragment
     private lateinit var todoItemAdapter: TodoItemAdapter
     private var deleteMenuItem: MenuItem? = null
 
@@ -118,7 +118,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onError(errorMessage: String) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+        addItemFragment.errorContainer.visibility = View.VISIBLE
     }
 
     fun onAddButtonClicked(view: View){

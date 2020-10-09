@@ -13,4 +13,5 @@
     <color name="greyBackground">#EEE</color>
     <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
+    <color name="errorBackground">#dd0055</color>
 </resources>

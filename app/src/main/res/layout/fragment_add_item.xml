@@ -8,139 +8,170 @@
             type="co.za.dstv.mytodo.features.dashboard.DashboardViewModel"/>
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/llContents"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@android:color/transparent"
         tools:context=".features.dashboard.fragments.AddItemFragment">
 
-        <LinearLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clErrorContainer"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:background="@android:color/transparent">
+            android:focusableInTouchMode="true"
+            android:paddingHorizontal="@dimen/small_padding"
+            android:background="@color/errorBackground"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgErroIcon"
+                android:layout_height="match_parent"
+                android:layout_width="55dp"
+                tools:text="Error message"
+                android:src="@drawable/ic_error_light"
+                android:scaleType="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                style="@style/MediumLightTextView"
+                android:id="@+id/txtErrorMessage"
+                android:layout_width="0dp"
+                tools:text="Error message"
+                android:text="@{dashboardViewModel.errorMessage}"
+                android:gravity="left"
+                app:layout_constraintLeft_toRightOf="@+id/imgErroIcon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTopBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/clErrorContainer"
+            android:background="@color/lightBackground">
+
+            <TextView
+                style="@style/MediumDarkTextView"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Create a new todo item"
+                android:textStyle="bold"
+                android:textSize="@dimen/medium_plus_text"
+                android:paddingLeft="@dimen/small_padding"
+                android:paddingRight="@dimen/large_padding"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/imgBCloseSaveLocationList"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_close_dark"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/svContent"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintTop_toBottomOf="@+id/clTopBanner">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clTopBanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                android:paddingBottom="@dimen/medium_padding"
                 android:background="@color/lightBackground">
 
-                <TextView
-                    style="@style/MediumDarkTextView"
-                    android:gravity="center"
+                <EditText
+                    android:id="@+id/txtItemName"
+                    style="@style/DarkEditText"
+                    android:hint="Title"
+                    android:text="@={dashboardViewModel.newItem.title}"
                     android:singleLine="true"
-                    android:text="Create a new todo item"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/medium_plus_text"
-                    android:paddingLeft="@dimen/small_padding"
-                    android:paddingRight="@dimen/large_padding"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-                <ImageButton
-                    android:id="@+id/imgBCloseSaveLocationList"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:padding="8dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_close_dark"
+                <EditText
+                    android:id="@+id/txtItemDescription"
+                    style="@style/DarkEditText"
+                    android:hint="Description"
+                    android:text="@={dashboardViewModel.newItem.description}"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:gravity="top|left"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemName"/>
+
+                <TextView
+                    android:id="@+id/tvDuedate"
+                    style="@style/MediumDarkTextView"
+                    android:layout_width="match_parent"
+                    android:background="@color/greyBackground"
+                    android:padding="@dimen/small_padding"
+                    android:text="Set due date and time"
+                    android:layout_marginTop="@dimen/large__margin"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemDescription"/>
+
+                <DatePicker
+                    android:id="@+id/dpDueDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:datePickerMode="spinner"
+                    android:calendarViewShown="false"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDuedate" />
+
+                <TimePicker
+                    android:id="@+id/tpDueTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleY="0.8"
+                    android:scaleX="0.8"
+                    android:layout_weight="20"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dpDueDate"/>
+
+                <Button
+                    style="@style/TodoButton"
+                    android:id="@+id/btnSignIn"
+                    android:layout_width="match_parent"
+                    android:text="@string/save_item"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintTop_toBottomOf="@+id/tpDueTime" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/clTopBanner">
+        </ScrollView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/medium_padding"
-                    android:background="@color/lightBackground">
-
-                    <EditText
-                        android:id="@+id/txtItemName"
-                        style="@style/DarkEditText"
-                        android:hint="Title"
-                        android:text="@={dashboardViewModel.newItem.title}"
-                        android:singleLine="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/small_margin"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <EditText
-                        android:id="@+id/txtItemDescription"
-                        style="@style/DarkEditText"
-                        android:hint="Description"
-                        android:text="@={dashboardViewModel.newItem.description}"
-                        android:layout_width="match_parent"
-                        android:layout_height="110dp"
-                        android:gravity="top|left"
-                        android:layout_marginTop="@dimen/small_margin"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
-                        app:layout_constraintTop_toBottomOf="@+id/txtItemName"/>
-
-                    <TextView
-                        android:id="@+id/tvDuedate"
-                        style="@style/MediumDarkTextView"
-                        android:layout_width="match_parent"
-                        android:background="@color/greyBackground"
-                        android:padding="@dimen/small_padding"
-                        android:text="Set due date and time"
-                        android:layout_marginTop="@dimen/large__margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtItemDescription"/>
-
-                    <DatePicker
-                        android:id="@+id/dpDueDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:datePickerMode="spinner"
-                        android:calendarViewShown="false"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvDuedate" />
-
-                    <TimePicker
-                        android:id="@+id/tpDueTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleY="0.8"
-                        android:scaleX="0.8"
-                        android:layout_weight="20"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dpDueDate"/>
-
-                    <Button
-                        style="@style/TodoButton"
-                        android:id="@+id/btnSignIn"
-                        android:layout_width="match_parent"
-                        android:text="@string/save_item"
-                        android:layout_marginTop="@dimen/medium_margin"
-                        android:layout_marginHorizontal="@dimen/medium_margin"
-                        app:layout_constraintTop_toBottomOf="@+id/tpDueTime" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </ScrollView>
-
-        </LinearLayout>
-    </FrameLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
