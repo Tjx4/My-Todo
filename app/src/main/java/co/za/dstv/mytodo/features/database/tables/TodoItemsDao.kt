@@ -1,6 +1,5 @@
 package co.za.dstv.mytodo.features.database.tables
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -9,7 +8,7 @@ interface TodoItemsDao {
     fun insert(todoItemsTable: TodoItemsTable)
 
     @Update
-    fun update(todoItemsTable: TodoItemsTable)
+    fun update(todoItems: List<TodoItemsTable>)
 
     @Delete
     fun delete(todoItems: List<TodoItemsTable>)

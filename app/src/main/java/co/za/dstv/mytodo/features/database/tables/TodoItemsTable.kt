@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 @Entity(tableName = "todo_items")
@@ -19,6 +18,8 @@ data class TodoItemsTable (
     var description:String? = null,
     @ColumnInfo(name = "complete")
     var complete:Boolean = false,
+    @ColumnInfo(name = "priority")
+    var priority:Boolean = false,
     @ColumnInfo(name = "dateCreated")
     var dateCreated: String? = null,
     @ColumnInfo(name = "dueDate")

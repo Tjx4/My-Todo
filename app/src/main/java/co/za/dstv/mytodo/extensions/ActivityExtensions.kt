@@ -31,7 +31,7 @@ private const val FAKE_TRANSLUCENT_VIEW_ID = R.id.statusbarutil_translucent_view
 
 
 fun AppCompatActivity.navigateToActivity(activity: Class<*>, transitionAnimation: Transition, payload: Bundle? = null) {
-    goToActivity(activity, transitionAnimation, null)
+    goToActivity(activity, transitionAnimation, payload)
 }
 
 private fun AppCompatActivity.goToActivity(activity: Class<*>, transitionAnimation: Transition, payload: Bundle?) {

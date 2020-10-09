@@ -26,7 +26,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: AddItemFragment
-    private lateinit var todoItemAdapter: TodoItemAdapter
+    private lateinit var todRvLayoutManager: LinearLayoutManager
+    private var todoItemAdapter: TodoItemAdapter? = null
     private var deleteMenuItem: MenuItem? = null
     private var priorityMenuItem: MenuItem? = null
 
@@ -43,6 +44,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         binding.lifecycleOwner = this
 
         addObservers()
+
+        iniViews()
     }
 
     private fun addObservers() {
@@ -55,6 +58,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
+    }
+
+    private fun iniViews() {
+        todRvLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvItems?.layoutManager = todRvLayoutManager
     }
 
     private fun onNoItems(isNoItems: Boolean) {
@@ -89,14 +97,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
-        val todRvLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvItems?.layoutManager = todRvLayoutManager
-
-
         todRvLayoutManager.initialPrefetchItemCount = todoItems.size
 
         todoItemAdapter = TodoItemAdapter(this, todoItems)
-        todoItemAdapter.setTodoClickListener(this)
+        todoItemAdapter?.setTodoClickListener(this)
         rvItems.adapter = todoItemAdapter
 
         rvItems.visibility = View.VISIBLE
@@ -110,10 +114,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             addItemFragment.dismiss()
-            todoItemAdapter.deselectAllItem()
+            todoItemAdapter?.deselectAllItem()
             dashboardViewModel.checkList.value?.clear()
-            dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
             dashboardViewModel.displayTodoItems()
+            dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
         }
     }
 
@@ -132,7 +136,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.dashboard_menu, menu)
@@ -161,7 +164,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
                 return super.onKeyDown(keyCode, event)
             }
             else{
-                todoItemAdapter.deselectAllItem()
+                todoItemAdapter?.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
                 dashboardViewModel.checkList.value = dashboardViewModel.checkList.value // Todo: fix
             }

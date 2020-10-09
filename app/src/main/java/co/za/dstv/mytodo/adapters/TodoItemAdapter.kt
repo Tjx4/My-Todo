@@ -1,6 +1,7 @@
 package co.za.dstv.mytodo.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
+import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
 import co.za.dstv.mytodo.extensions.navigateToActivity
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
@@ -19,7 +21,7 @@ import co.za.dstv.mytodo.features.item.ItemViewActivity
 import co.za.dstv.mytodo.models.TodoItem
 
 
-class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : RecyclerView.Adapter<TodoItemAdapter.ViewHolder>() {
+class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) : RecyclerView.Adapter<TodoItemAdapter.ViewHolder>() {
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
@@ -33,7 +35,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         allItems.add(holder)
-        val todoItem = todoItem[position]
+        val todoItem = todoItems[position]
         holder.titleTv.text = todoItem.title
         holder.descriptionTv.text = todoItem.description
         holder.doneCb.isChecked = todoItem.complete
@@ -43,6 +45,10 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         holder.dueDateTv.text = "Due on $due"
         if(due == null){
             holder.dueDateTv.visibility = View.INVISIBLE
+        }
+
+        if(todoItem.priority){
+            setItemPriority(holder)
         }
 
         handleItemClicks(holder, position)
@@ -61,10 +67,11 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
                 if (isEmptyCheckList) {
                     notifyItemChanged(selectedPos)
-                    dashboardActivity.navigateToActivity(
-                        ItemViewActivity::class.java,
-                        SLIDE_IN_ACTIVITY
-                    )
+
+                    val item =  todoItems[position]
+                    var payload = Bundle()
+                    payload.putParcelable(TODO_ITEM_KEY, item)
+                    dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
                 } else {
                     dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                     setItemSelected(holder)
@@ -72,8 +79,11 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
             } else {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
-            }
 
+                if(todoItems[position].priority){
+                    setItemPriority(holder)
+                }
+            }
         }
 
         holder.itemView.setOnLongClickListener {
@@ -86,6 +96,10 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
                 notifyItemChanged(selectedPos)
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
+
+                if(todoItems[position].priority){
+                    setItemPriority(holder)
+                }
             }
 
             true
@@ -93,8 +107,15 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     }
 
     fun deselectAllItem(){
+        var indx = 0
         allItems.forEach(){
             deselectItem(it)
+
+            if(todoItems[indx].priority){
+                setItemPriority(it)
+            }
+
+            indx++
         }
     }
 
@@ -122,6 +143,18 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         // holder.itemView.isSelected = true
     }
 
+    private fun setItemPriority(
+        holder: ViewHolder?
+    ) {
+        val parent = holder?.itemView as CardView
+        val child = parent.getChildAt(0) as FrameLayout
+        val grandChild = child.getChildAt(0) as ConstraintLayout
+        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
+
+        holder.checkedImg.visibility = View.GONE
+        // holder.itemView.isSelected = false
+    }
+
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
@@ -140,7 +173,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     }
 
     internal fun getItem(id: Int): TodoItem? {
-        return todoItem[id]
+        return todoItems[id]
     }
 
     interface TodoItemClickListener {
@@ -151,6 +184,6 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         this.todoItemClickListener = todoItemClickListener
     }
 
-    override fun getItemCount() = todoItem.size
+    override fun getItemCount() = todoItems.size
 
 }

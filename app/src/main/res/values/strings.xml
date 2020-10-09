@@ -14,4 +14,5 @@
     <string name="item_add_error">Error adding todo item</string>
     <string name="item_delete_error">Sorry we were unable to delete your items, please try again</string>
     <string name="item_deleted">Item deleted</string>
+    <string name="priority_error_message">Error setting priority</string>
 </resources>

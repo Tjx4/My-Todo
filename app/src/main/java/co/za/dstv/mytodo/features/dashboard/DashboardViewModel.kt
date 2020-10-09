@@ -100,7 +100,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     }
                 }
 
-                _todoProgress.value = completed * 100 / todoItems.size
+                _todoProgress.value = if(todoItems.isNotEmpty()) completed * 100 / todoItems.size else 0
 
                 if(todoItems.isNullOrEmpty()){
                     _isNoItems.value = true
@@ -184,6 +184,26 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
 
     fun setPriorityOnSelectedItems(){
+        val itemsDeleteList = arrayListOf<TodoItem?>()
+        _checkList.value?.forEach {
+            itemsDeleteList.add(todoItems.value?.get(it))
+        }
+
+        ioScope.launch {
+            var priorityItems = dashboardRepository.toggleItemPrioriy(itemsDeleteList)
+
+            uiScope.launch {
+                if(priorityItems.success){
+                    _checkList.value?.clear()
+                    displayTodoItems()
+                }
+                else{
+                    _errorMessage.value = app.getString(R.string.priority_error_message)
+                }
+
+                _showContent.value = true
+            }
+        }
 
     }
 

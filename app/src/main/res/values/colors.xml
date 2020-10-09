@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#111</color>
     <color name="colorAccent">#0088cc</color>
     <color name="progressBackground">#666</color>
-    <color name="itemSelectedBackground">#EEE</color>
+    <color name="itemSelectedBackground">#DDD</color>
     <color name="darkGrey">#CCC</color>
     <color name="lightGreyText">#999</color>
     <color name="lightText">#DDD</color>
@@ -14,4 +14,5 @@
     <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
     <color name="errorBackground">#dd0055</color>
+    <color name="priorityBackground">#FCF9DE</color>
 </resources>
