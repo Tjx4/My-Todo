@@ -33,33 +33,39 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         allItems.add(holder)
-
         val todoItem = todoItem[position]
         holder.titleTv.text = todoItem.title
         holder.descriptionTv.text = todoItem.description
         holder.doneCb.isChecked = todoItem.complete
+
         //Todo: check if over due
         holder.dueDateTv.text = "Due on ${todoItem.dueDate}"
 
-       // holder.itemView.isSelected = selectedPos == position
+        handleItemClicks(holder, position)
+    }
 
+    private fun handleItemClicks(
+        holder: ViewHolder,
+        position: Int
+    ) {
         holder.itemView.setOnClickListener() {
-            holder.itemView.isSelected = selectedPos == position
             selectedPos = holder.layoutPosition
 
-            val isEmptyCheckList = dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
+            if (holder.checkedImg.visibility != View.VISIBLE) {
+                val isEmptyCheckList =
+                    dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
-            if(holder.checkedImg.visibility != View.VISIBLE){
-                if(isEmptyCheckList){
+                if (isEmptyCheckList) {
                     notifyItemChanged(selectedPos)
-                    dashboardActivity.navigateToActivity(ItemViewActivity::class.java,SLIDE_IN_ACTIVITY)
-                }
-                else{
+                    dashboardActivity.navigateToActivity(
+                        ItemViewActivity::class.java,
+                        SLIDE_IN_ACTIVITY
+                    )
+                } else {
                     dashboardActivity.dashboardViewModel.checkList.value?.add(position)
                     setItemSelected(holder)
                 }
-            }
-            else{
+            } else {
                 dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
                 deselectItem(holder)
             }
@@ -67,14 +73,12 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
         }
 
         holder.itemView.setOnLongClickListener {
-            holder.itemView.isSelected =  selectedPos == position
             selectedPos = holder.layoutPosition
 
-            if(holder.checkedImg.visibility != View.VISIBLE){
+            if (holder.checkedImg.visibility != View.VISIBLE) {
                 dashboardActivity.dashboardViewModel.checkList.value?.add(position)
                 setItemSelected(holder)
-            }
-            else{
+            } else {
                 notifyItemChanged(selectedPos)
                 dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
                 deselectItem(holder)
@@ -82,7 +86,6 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
             true
         }
-
     }
 
     fun deselectAllItem(){

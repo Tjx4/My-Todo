@@ -2,6 +2,8 @@ package co.za.dstv.mytodo.features.dashboard
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -26,6 +28,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
     private lateinit var todoItemAdapter: TodoItemAdapter
+    private lateinit var deleteMenuItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +48,40 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun addObservers() {
         dashboardViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })
+        dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
+        dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
+    }
+
+    private fun onNoItems(isNoItems: Boolean) {
+        rvItems.visibility = View.GONE
+        tvNoItems.visibility = View.VISIBLE
+    }
+
+
+    private fun onShowLoading(isBusy: Boolean) {
+        clCParent.visibility = View.INVISIBLE
+        showLoadingDialog(dashboardViewModel.busyMessage, this)
+    }
+
+    fun setSelectionMode(isSelectionMode: Boolean) {
+        supportActionBar?.title = ""
+        deleteMenuItem.isVisible = true
+    }
+
+    private fun onShowContent(showContent: Boolean) {
+        hideCurrentLoadingDialog(this)
+        clCParent.visibility = View.VISIBLE
+
+        supportActionBar?.title = getString(R.string.app_name)
+        deleteMenuItem.isVisible = false
+    }
+
+    private fun onCheckListUpdated(items: List<Int>) {
+        dashboardViewModel.checkItems(items.size)
     }
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
@@ -66,23 +99,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         tvNoItems.visibility = View.GONE
     }
 
-    private fun onNoItems(isNoItems: Boolean) {
-        rvItems.visibility = View.GONE
-        tvNoItems.visibility = View.VISIBLE
-    }
-
     override fun onServiceCategoryClick(view: View, position: Int) {
 
-    }
-
-    private fun onShowLoading(isBusy: Boolean) {
-        clCParent.visibility = View.INVISIBLE
-        showLoadingDialog(dashboardViewModel.busyMessage, this)
-    }
-
-    private fun onShowContent(showContent: Boolean) {
-        hideCurrentLoadingDialog(this)
-        clCParent.visibility = View.VISIBLE
     }
 
     private fun onItemAdded(showContent: Boolean) {
@@ -100,6 +118,22 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.dashboard_menu, menu)
+        deleteMenuItem = menu.findItem(R.id.action_delette_item)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delette_item -> {
+                Toast.makeText(this, "Delete ${dashboardViewModel.checkList}", Toast.LENGTH_LONG).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

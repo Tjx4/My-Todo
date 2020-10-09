@@ -23,6 +23,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     val isNoItems: MutableLiveData<Boolean>
         get() = _isNoItems
 
+    var busyMessage: String = "Please wait..."
+
     private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
     val isItemAdded: MutableLiveData<Boolean>
         get() = _isItemAdded
@@ -31,7 +33,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     var todoProgress: MutableLiveData<Int> = MutableLiveData()
         get() = _todoProgress
 
-    var busyMessage: String = "Please wait..."
+    private val _isSelectionMode: MutableLiveData<Boolean> = MutableLiveData()
+    val isSelectionMode: MutableLiveData<Boolean>
+        get() = _isSelectionMode
 
     private val _newItem: MutableLiveData<TodoItem> = MutableLiveData()
     val newItem: MutableLiveData<TodoItem>
@@ -55,6 +59,15 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         displayTodoItems()
 
 _todoProgress.value = 70
+    }
+
+    fun checkItems(itemCount: Int){
+        if(itemCount > 0){
+            _isSelectionMode.value = true
+        }
+        else{
+            _showContent.value = true
+        }
     }
 
     fun setDueDate(selectedDateTime: String){

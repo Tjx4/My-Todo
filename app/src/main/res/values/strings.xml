@@ -10,4 +10,5 @@
     <string name="ok">Ok</string>
     <string name="item_added">Item saved successfully</string>
     <string name="done">Done</string>
+    <string name="delete">Delete</string>
 </resources>
