@@ -24,7 +24,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
     private var selectedPos = RecyclerView.NO_POSITION
-    var allItems = ArrayList<View>()
+    var allItems = ArrayList<ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.todo_item_layout, parent, false)
@@ -32,7 +32,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        allItems.add(holder.itemView)
+        allItems.add(holder)
 
         val todoItem = todoItem[position]
         holder.titleTv.text = todoItem.title
@@ -56,12 +56,12 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
                 }
                 else{
                     dashboardActivity.dashboardViewModel.checkList.value?.add(position)
-                    setItemSelected(it, holder)
+                    setItemSelected(holder)
                 }
             }
             else{
                 dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
-                deselectItem(it, holder)
+                deselectItem(holder)
             }
 
         }
@@ -72,12 +72,12 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
             if(holder.checkedImg.visibility != View.VISIBLE){
                 dashboardActivity.dashboardViewModel.checkList.value?.add(position)
-                setItemSelected(it, holder)
+                setItemSelected(holder)
             }
             else{
                 notifyItemChanged(selectedPos)
                 dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
-                deselectItem(it, holder)
+                deselectItem(holder)
             }
 
             true
@@ -85,28 +85,34 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
 
     }
 
+    fun deselectAllItem(){
+        allItems.forEach(){
+            deselectItem(it)
+        }
+    }
+
     private fun deselectItem(
-        it: View?,
-        holder: ViewHolder
+        holder: ViewHolder?
     ) {
-        val parent = it as CardView
+        val parent = holder?.itemView as CardView
         val child = parent.getChildAt(0) as FrameLayout
         val grandChild = child.getChildAt(0) as ConstraintLayout
         grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
+
         holder.checkedImg.visibility = View.GONE
-        holder.itemView.isSelected = false
+       // holder.itemView.isSelected = false
     }
 
     private fun setItemSelected(
-        it: View?,
-        holder: ViewHolder
+        holder: ViewHolder?
     ) {
-        val parent = it as CardView
+        val parent = holder?.itemView as CardView
         val child = parent.getChildAt(0) as FrameLayout
         val grandChild = child.getChildAt(0) as ConstraintLayout
         grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
+
         holder.checkedImg.visibility = View.VISIBLE
-        holder.itemView.isSelected = true
+        // holder.itemView.isSelected = true
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

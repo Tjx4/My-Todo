@@ -52,7 +52,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     init {
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
-        setTodoItems()
+        displayTodoItems()
 
 _todoProgress.value = 70
     }
@@ -61,7 +61,7 @@ _todoProgress.value = 70
         _newItem.value?.dueDate = selectedDateTime
     }
 
-    fun setTodoItems(){
+    fun displayTodoItems(){
         ioScope.launch {
             val todoItems = dashboardRepository.getItemsFromDb()
             uiScope.launch {

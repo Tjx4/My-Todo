@@ -3,10 +3,7 @@ package co.za.dstv.mytodo.features.dashboard
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,6 +25,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
+    private lateinit var todoItemAdapter: TodoItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +58,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         todRvLayoutManager.initialPrefetchItemCount = todoItems.size
 
-        val todoItemAdapter = TodoItemAdapter(this, todoItems)
+        todoItemAdapter = TodoItemAdapter(this, todoItems)
         todoItemAdapter.setTodoClickListener(this)
         rvItems.adapter = todoItemAdapter
 
@@ -90,7 +88,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             addItemFragment.dismiss()
-            dashboardViewModel.setTodoItems()
+            dashboardViewModel.displayTodoItems()
         }
     }
 
@@ -113,10 +111,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             }
             else{
                 dashboardViewModel.checkList.value?.clear()
-                //Unselect all
+                todoItemAdapter.deselectAllItem()
             }
-
-            return super.onKeyDown(keyCode, event)
         }
 
         return true
