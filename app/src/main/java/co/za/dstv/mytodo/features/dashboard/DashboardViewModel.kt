@@ -2,10 +2,12 @@ package co.za.dstv.mytodo.features.dashboard
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.extensions.isValidDescription
 import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.helpers.getDateAndTime
+import co.za.dstv.mytodo.models.DbOperationResult
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.coroutines.launch
 
@@ -28,6 +30,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
     val isItemAdded: MutableLiveData<Boolean>
         get() = _isItemAdded
+
+    private val _isItemsDeleted: MutableLiveData<Int> = MutableLiveData()
+    val isItemDeleted: MutableLiveData<Int>
+        get() = _isItemsDeleted
 
     private val _todoProgress: MutableLiveData<Int> = MutableLiveData()
     var todoProgress: MutableLiveData<Int> = MutableLiveData()
@@ -112,17 +118,23 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
         ioScope.launch {
             _newItem.value?.dateCreated = getDateAndTime()
-            addNewTodoListItem()
+            val addItem = addNewTodoListItem()
 
             uiScope.launch {
-                _isItemAdded.value = true
-                _newItem.value = TodoItem()
+
+                if(addItem.success){
+                    _isItemAdded.value = true
+                    _newItem.value = TodoItem()
+                }
+                else{
+                    _errorMessage.value = app.getString(R.string.item_add_error)
+                }
             }
         }
     }
 
-    suspend fun addNewTodoListItem(){
-        dashboardRepository.addItemToDb(_newItem.value!!)
+    suspend fun addNewTodoListItem(): DbOperationResult {
+        return dashboardRepository.addItemToDb(_newItem.value!!)
     }
 
     fun deleteSelectedItems(){
@@ -132,7 +144,18 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
 
         ioScope.launch {
-            dashboardRepository.deleteItemsFromDb(itemsDeleteList)
+            var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
+
+            uiScope.launch {
+                if(deleteItems.success){
+                    _isItemsDeleted.value = itemsDeleteList.size
+                    _showContent.value = true
+                    _checkList.value?.clear()
+                }
+                else{
+                    _errorMessage.value = app.getString(R.string.item_delete_error)
+                }
+            }
         }
     }
 

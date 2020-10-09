@@ -11,4 +11,7 @@
     <string name="item_added">Item saved successfully</string>
     <string name="done">Done</string>
     <string name="delete">Delete</string>
+    <string name="item_add_error">Error adding todo item</string>
+    <string name="item_delete_error">Sorry we were unable to delete your items, please try again</string>
+    <string name="item_deleted">Item deleted</string>
 </resources>

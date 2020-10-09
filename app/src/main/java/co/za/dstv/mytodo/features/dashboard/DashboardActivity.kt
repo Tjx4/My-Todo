@@ -51,6 +51,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
+        dashboardViewModel.isItemDeleted.observe(this, Observer { onItemDeleted(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
@@ -109,6 +110,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             addItemFragment.dismiss()
             dashboardViewModel.displayTodoItems()
         }
+    }
+
+    private fun onItemDeleted(deletedItems: Int) {
+        Toast.makeText(this, if(deletedItems == 1) getString(R.string.item_deleted) else "$deletedItems items deleted", Toast.LENGTH_LONG).show()
+        dashboardViewModel.displayTodoItems()
     }
 
     private fun onError(errorMessage: String) {
