@@ -62,7 +62,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
                         SLIDE_IN_ACTIVITY
                     )
                 } else {
-                    dashboardActivity.dashboardViewModel.addItemToCheckList(position)
+                    dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                     setItemSelected(holder)
                 }
             } else {
@@ -76,7 +76,7 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
             selectedPos = holder.layoutPosition
 
             if (holder.checkedImg.visibility != View.VISIBLE) {
-                dashboardActivity.dashboardViewModel.addItemToCheckList(position)
+                dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                 setItemSelected(holder)
             } else {
                 notifyItemChanged(selectedPos)

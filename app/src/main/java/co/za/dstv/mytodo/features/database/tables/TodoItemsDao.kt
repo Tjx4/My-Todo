@@ -12,7 +12,7 @@ interface TodoItemsDao {
     fun update(todoItemsTable: TodoItemsTable)
 
     @Delete
-    fun delete(todoItemsTable: TodoItemsTable)
+    fun delete(todoItems: List<TodoItemsTable>)
 
     @Query("SELECT * FROM todo_items WHERE id = :key")
     fun get(key: Int): TodoItemsTable?

@@ -131,12 +131,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
-                var dd = "("
-                dashboardViewModel.checkList.value?.forEach {
-                    dd = "$dd, $it"
-                }
-                dd = "$dd )"
-                Toast.makeText(this, "Delete $dd", Toast.LENGTH_LONG).show()
+                dashboardViewModel.deleteSelectedItems()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -151,6 +146,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             }
             else{
                 dashboardViewModel.checkList.value?.clear()
+                dashboardViewModel.checkList.value = dashboardViewModel.checkList.value // Todo: fix
                 todoItemAdapter.deselectAllItem()
             }
         }

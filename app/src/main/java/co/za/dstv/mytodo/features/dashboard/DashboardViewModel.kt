@@ -57,8 +57,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
         displayTodoItems()
-
-_todoProgress.value = 70
     }
 
     fun checkItems(itemCount: Int){
@@ -70,7 +68,7 @@ _todoProgress.value = 70
         }
     }
 
-    fun addItemToCheckList(itemIndex: Int){
+    fun addNewTodoListItem(itemIndex: Int){
         _checkList.value?.add(itemIndex)
         _checkList.value = _checkList.value
     }
@@ -88,6 +86,8 @@ _todoProgress.value = 70
         ioScope.launch {
             val todoItems = dashboardRepository.getItemsFromDb()
             uiScope.launch {
+                val completed = 3
+                _todoProgress.value = completed * 100 / todoItems.size
 
                 if(todoItems.isNullOrEmpty()){
                     _isNoItems.value = true
@@ -112,7 +112,7 @@ _todoProgress.value = 70
 
         ioScope.launch {
             _newItem.value?.dateCreated = getDateAndTime()
-            addItemToCheckList()
+            addNewTodoListItem()
 
             uiScope.launch {
                 _isItemAdded.value = true
@@ -121,13 +121,21 @@ _todoProgress.value = 70
         }
     }
 
-    suspend fun addItemToCheckList(){
+    suspend fun addNewTodoListItem(){
         dashboardRepository.addItemToDb(_newItem.value!!)
     }
 
-    suspend fun deleteItem(){
-        dashboardRepository.deleteItemFromDb(_newItem.value!!)
+    fun deleteSelectedItems(){
+        val itemsDeleteList = arrayListOf<TodoItem?>()
+        _checkList.value?.forEach {
+            itemsDeleteList.add(todoItems.value?.get(it))
+        }
+
+        ioScope.launch {
+            dashboardRepository.deleteItemsFromDb(itemsDeleteList)
+        }
     }
+
 
     fun checkIsValidTitle(title: String?): Boolean {
         return title?.isValidTitle() ?: false

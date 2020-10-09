@@ -10,9 +10,16 @@ class DashboardRepository(var database: TodoDb) {
         database.todoItemsDao.insert(todoItemsTable)
     }
 
-    suspend fun deleteItemFromDb(todoItem: TodoItem){
-        val todoItemsTable = TodoItemsTable(todoItem.id, todoItem.title, todoItem.description, todoItem.complete, todoItem.dateCreated, todoItem.dueDate)
-        database.todoItemsDao.delete(todoItemsTable)
+    suspend fun deleteItemsFromDb(items : List<TodoItem?> ){
+        val deleteList = arrayListOf<TodoItemsTable>()
+
+        items.forEach {
+            if(it != null){
+                val todoItemsTable = TodoItemsTable(it.id, it?.title, it?.description, it?.complete ?: false, it?.dateCreated, it?.dueDate)
+                deleteList.add(todoItemsTable)
+            }
+        }
+        database.todoItemsDao.delete(deleteList)
     }
 
     suspend fun getItemsFromDb(): List<TodoItem> {
