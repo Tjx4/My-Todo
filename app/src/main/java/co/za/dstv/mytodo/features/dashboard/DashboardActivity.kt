@@ -28,7 +28,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var addItemFragment: BaseDialogFragment
     private lateinit var todoItemAdapter: TodoItemAdapter
-    private lateinit var deleteMenuItem: MenuItem
+    private var deleteMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +68,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun setSelectionMode(isSelectionMode: Boolean) {
-        supportActionBar?.title = ""
-        deleteMenuItem.isVisible = true
+        val itemCount = dashboardViewModel.checkList.value?.size
+        supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
+        deleteMenuItem?.isVisible = true
     }
 
     private fun onShowContent(showContent: Boolean) {
@@ -77,10 +78,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         clCParent.visibility = View.VISIBLE
 
         supportActionBar?.title = getString(R.string.app_name)
-        deleteMenuItem.isVisible = false
+        deleteMenuItem?.isVisible = false
     }
 
-    private fun onCheckListUpdated(items: List<Int>) {
+    private fun onCheckListUpdated(items: MutableList<Int>) {
         dashboardViewModel.checkItems(items.size)
     }
 
@@ -130,7 +131,12 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
-                Toast.makeText(this, "Delete ${dashboardViewModel.checkList}", Toast.LENGTH_LONG).show()
+                var dd = "("
+                dashboardViewModel.checkList.value?.forEach {
+                    dd = "$dd, $it"
+                }
+                dd = "$dd )"
+                Toast.makeText(this, "Delete $dd", Toast.LENGTH_LONG).show()
             }
         }
         return super.onOptionsItemSelected(item)

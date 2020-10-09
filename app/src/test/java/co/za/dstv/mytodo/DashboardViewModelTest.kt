@@ -34,7 +34,7 @@ class DashboardViewModelTest {
     @Test
     fun `test Add item`() = runBlocking  {
         val testItem = TodoItem()
-        dashboardViewModel.addItem(testItem)
+        dashboardViewModel.addItemToCheckList(testItem)
         assert(false)
     }
 

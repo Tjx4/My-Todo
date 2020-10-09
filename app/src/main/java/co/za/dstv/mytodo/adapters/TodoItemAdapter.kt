@@ -62,11 +62,11 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
                         SLIDE_IN_ACTIVITY
                     )
                 } else {
-                    dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                    dashboardActivity.dashboardViewModel.addItemToCheckList(position)
                     setItemSelected(holder)
                 }
             } else {
-                dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
+                dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
             }
 
@@ -76,11 +76,11 @@ class TodoItemAdapter(context: Context, private val todoItem: List<TodoItem>) : 
             selectedPos = holder.layoutPosition
 
             if (holder.checkedImg.visibility != View.VISIBLE) {
-                dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                dashboardActivity.dashboardViewModel.addItemToCheckList(position)
                 setItemSelected(holder)
             } else {
                 notifyItemChanged(selectedPos)
-                dashboardActivity.dashboardViewModel.checkList.value?.remove(position)
+                dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
             }
 

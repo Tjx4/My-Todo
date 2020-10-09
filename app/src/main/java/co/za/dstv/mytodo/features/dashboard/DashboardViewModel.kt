@@ -45,8 +45,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
         get() = _todoItems
 
-    private var _checkList: MutableLiveData<ArrayList<Int>> = MutableLiveData()
-    var checkList: MutableLiveData<ArrayList<Int>> = MutableLiveData()
+    private var _checkList: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    val checkList: MutableLiveData<MutableList<Int>>
         get() = _checkList
 
     private var _errorMessage: MutableLiveData<String> = MutableLiveData()
@@ -68,6 +68,16 @@ _todoProgress.value = 70
         else{
             _showContent.value = true
         }
+    }
+
+    fun addItemToCheckList(itemIndex: Int){
+        _checkList.value?.add(itemIndex)
+        _checkList.value = _checkList.value
+    }
+
+    fun removeItemFroCheckList(itemIndex: Int){
+        _checkList.value?.remove(itemIndex)
+        _checkList.value = _checkList.value
     }
 
     fun setDueDate(selectedDateTime: String){
@@ -102,7 +112,7 @@ _todoProgress.value = 70
 
         ioScope.launch {
             _newItem.value?.dateCreated = getDateAndTime()
-            addItem()
+            addItemToCheckList()
 
             uiScope.launch {
                 _isItemAdded.value = true
@@ -111,7 +121,7 @@ _todoProgress.value = 70
         }
     }
 
-    suspend fun addItem(){
+    suspend fun addItemToCheckList(){
         dashboardRepository.addItemToDb(_newItem.value!!)
     }
 
