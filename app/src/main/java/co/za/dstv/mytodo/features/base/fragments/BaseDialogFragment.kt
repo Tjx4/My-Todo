@@ -27,7 +27,6 @@ abstract class BaseDialogFragment : DialogFragment() {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.attributes?.windowAnimations = R.style.DialogTheme
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        dialog?.window?.setGravity(Gravity.BOTTOM)
 
         val layout = arguments!!.getInt(LAYOUT)
         return inflater.inflate(layout, container, false)

@@ -9,6 +9,7 @@ import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.helpers.getDateAndTime
 import co.za.dstv.mytodo.models.DbOperationResult
 import co.za.dstv.mytodo.models.TodoItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(application: Application, private val dashboardRepository: DashboardRepository) : BaseVieModel(application) {
@@ -92,7 +93,13 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         ioScope.launch {
             val todoItems = dashboardRepository.getItemsFromDb()
             uiScope.launch {
-                val completed = 3
+                var completed = 0
+                todoItems.forEach {
+                    if(it.complete == true){
+                        completed++
+                    }
+                }
+
                 _todoProgress.value = completed * 100 / todoItems.size
 
                 if(todoItems.isNullOrEmpty()){
@@ -116,7 +123,13 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             return
         }
 
+        busyMessage = "Adding item please wait..."
+        _showLoading.value = true
+
         ioScope.launch {
+            // Todo: remove just for demo purposes
+            delay(1000)
+
             _newItem.value?.dateCreated = getDateAndTime()
             val addItem = addNewTodoListItem()
 
@@ -129,6 +142,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                 else{
                     _errorMessage.value = app.getString(R.string.item_add_error)
                 }
+
+                _showContent.value = true
             }
         }
     }
@@ -143,18 +158,26 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             itemsDeleteList.add(todoItems.value?.get(it))
         }
 
+        busyMessage = "Busy deleting please wait"
+        _showLoading.value = true
+
         ioScope.launch {
+            // Todo: remove just for demo purposes
+            delay(1500)
+
             var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
 
             uiScope.launch {
+
                 if(deleteItems.success){
                     _isItemsDeleted.value = itemsDeleteList.size
-                    _showContent.value = true
                     _checkList.value?.clear()
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.item_delete_error)
                 }
+
+                _showContent.value = true
             }
         }
     }

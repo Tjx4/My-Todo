@@ -108,6 +108,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             addItemFragment.dismiss()
+            todoItemAdapter.deselectAllItem()
+            dashboardViewModel.checkList.value?.clear()
+            dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
             dashboardViewModel.displayTodoItems()
         }
     }
@@ -119,6 +122,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     private fun onError(errorMessage: String) {
         addItemFragment.errorContainer.visibility = View.VISIBLE
+        addItemFragment.contentSv.smoothScrollTo(0,0)
     }
 
     fun onAddButtonClicked(view: View){
@@ -151,9 +155,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
                 return super.onKeyDown(keyCode, event)
             }
             else{
+                todoItemAdapter.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
                 dashboardViewModel.checkList.value = dashboardViewModel.checkList.value // Todo: fix
-                todoItemAdapter.deselectAllItem()
             }
         }
 

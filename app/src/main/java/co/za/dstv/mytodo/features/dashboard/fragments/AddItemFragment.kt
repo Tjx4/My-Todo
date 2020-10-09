@@ -3,12 +3,14 @@ package co.za.dstv.mytodo.features.dashboard.fragments
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageButton
+import android.widget.ScrollView
 import androidx.databinding.DataBindingUtil
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.FragmentAddItemBinding
@@ -25,6 +27,7 @@ class AddItemFragment : BaseDialogFragment() {
      lateinit var signInBtn: Button
      lateinit var dueDateDp: DatePicker
      lateinit var errorContainer: View
+     lateinit var contentSv: ScrollView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,8 @@ class AddItemFragment : BaseDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        dialog?.window?.setGravity(Gravity.BOTTOM)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_item, container, false)
         binding.lifecycleOwner = this
         binding.dashboardViewModel = dashboardActivity?.dashboardViewModel
@@ -42,6 +47,7 @@ class AddItemFragment : BaseDialogFragment() {
 
     private fun initViews(parentView: View) {
         errorContainer = parentView.findViewById(R.id.clErrorContainer)
+        contentSv = parentView.findViewById(R.id.svContent)
 
         dueDateDp = parentView.findViewById(R.id.dpDueDate)
         val calendar: Calendar = Calendar.getInstance()
@@ -60,6 +66,8 @@ class AddItemFragment : BaseDialogFragment() {
 
         closeSaveLocationListImgB = parentView.findViewById(R.id.imgBCloseSaveLocationList)
         closeSaveLocationListImgB.setOnClickListener {
+            dashboardActivity?.dashboardViewModel?.newItem?.value?.title = ""
+            dashboardActivity?.dashboardViewModel?.newItem?.value?.description = ""
             dismiss()
         }
 

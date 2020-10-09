@@ -16,7 +16,6 @@
         android:background="@android:color/transparent"
         tools:context=".features.dashboard.fragments.AddItemFragment">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clErrorContainer"
             android:visibility="gone"
@@ -91,7 +90,7 @@
         <ScrollView
             android:id="@+id/svContent"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="390dp"
             app:layout_constraintTop_toBottomOf="@+id/clTopBanner">
 
             <androidx.constraintlayout.widget.ConstraintLayout
