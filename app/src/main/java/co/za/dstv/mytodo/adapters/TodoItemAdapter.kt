@@ -60,7 +60,15 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         holder.itemView.setOnClickListener() {
             selectedPos = holder.layoutPosition
 
-            if (holder.checkedImg.visibility != View.VISIBLE) {
+            if(allItems[position].itemView.isSelected) {
+                dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
+                deselectItem(holder)
+
+                if(todoItems[position].priority){
+                    setItemPriority(holder)
+                }
+            }
+            else {
                 val isEmptyCheckList =
                     dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
@@ -75,7 +83,13 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                     setItemSelected(holder)
                 }
-            } else {
+            }
+        }
+
+        holder.itemView.setOnLongClickListener {
+            selectedPos = holder.layoutPosition
+
+            if(allItems[position].itemView.isSelected){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
 
@@ -83,22 +97,9 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     setItemPriority(holder)
                 }
             }
-        }
-
-        holder.itemView.setOnLongClickListener {
-            selectedPos = holder.layoutPosition
-
-            if (holder.checkedImg.visibility != View.VISIBLE) {
+            else{
                 dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                 setItemSelected(holder)
-            } else {
-                notifyItemChanged(selectedPos)
-                dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(holder)
-
-                if(todoItems[position].priority){
-                    setItemPriority(holder)
-                }
             }
 
             true
@@ -127,7 +128,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
 
         holder.checkedImg.visibility = View.GONE
-       // holder.itemView.isSelected = false
+        holder.itemView.isSelected = false
     }
 
     private fun setItemSelected(
@@ -139,7 +140,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
 
         holder.checkedImg.visibility = View.VISIBLE
-        // holder.itemView.isSelected = true
+        holder.itemView.isSelected = true
     }
 
     private fun setItemPriority(
