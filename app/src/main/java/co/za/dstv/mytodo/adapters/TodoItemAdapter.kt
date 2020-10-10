@@ -42,12 +42,12 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         val dueDate = todoItem.dueDate
         holder.dueDateTv.text = "Due on $dueDate"
 
-        if(todoItem.priority){
-            setItemPriority(holder)
+        if(allItems[position].isPriority){
+            setItemPriority(position)
         }
 
-        if(allItems[position].itemView.isSelected) {
-            setItemSelected(holder)
+        if(allItems[position].isSelected) {
+            setItemSelected(position)
         }
 
         handleItemClicks(holder, position)
@@ -60,12 +60,12 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         holder.itemView.setOnClickListener() {
             selectedPos = holder.layoutPosition
 
-            if(allItems[position].itemView.isSelected) {
+            if(allItems[position].isSelected) {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(holder)
+                deselectItem(position)
 
-                if(todoItems[position].priority){
-                    setItemPriority(holder)
+                if(allItems[position].isPriority){
+                    setItemPriority(position)
                 }
             }
             else {
@@ -81,7 +81,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
                 } else {
                     dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
-                    setItemSelected(holder)
+                    setItemSelected(position)
                 }
             }
         }
@@ -89,17 +89,17 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         holder.itemView.setOnLongClickListener {
             selectedPos = holder.layoutPosition
 
-            if(allItems[position].itemView.isSelected){
+            if(allItems[position].isSelected){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(holder)
+                deselectItem(position)
 
-                if(todoItems[position].priority){
-                    setItemPriority(holder)
+                if(allItems[position].isPriority){
+                    setItemPriority(position)
                 }
             }
             else{
                 dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
-                setItemSelected(holder)
+                setItemSelected(position)
             }
 
             true
@@ -109,54 +109,44 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
     fun deselectAllItem(){
         var indx = 0
         allItems.forEach() {
-            deselectItem(it)
+            deselectItem(indx)
 
             if(it.isPriority){
-                setItemPriority(it)
+                setItemPriority(indx)
             }
 
             indx++
         }
     }
 
-    private fun deselectItem(
-        holder: ViewHolder?
-    ) {
-        val parent = holder?.itemView as CardView
-        val child = parent.getChildAt(0) as FrameLayout
-        val grandChild = child.getChildAt(0) as ConstraintLayout
-        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border)
+    private fun deselectItem(position: Int) {
+        val parentView = allItems[position]?.itemView as View
+        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border)
 
-        holder.checkedImg.visibility = View.GONE
-        holder.itemView.isSelected = false
+        allItems[position].checkedImg.visibility = View.GONE
+        allItems[position].isSelected
+        allItems[position].isSelected = false
     }
 
-    private fun setItemSelected(
-        holder: ViewHolder?
-    ) {
-        val parent = holder?.itemView as CardView
-        val child = parent.getChildAt(0) as FrameLayout
-        val grandChild = child.getChildAt(0) as ConstraintLayout
-        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
+    private fun setItemSelected(position: Int) {
+        val parentView = allItems[position]?.itemView as View
+        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
 
-        holder.checkedImg.visibility = View.VISIBLE
-        holder.itemView.isSelected = true
+        allItems[position].checkedImg.visibility = View.VISIBLE
+        allItems[position].isSelected = true
     }
 
-    private fun setItemPriority(
-        holder: ViewHolder?
-    ) {
-        val parent = holder?.itemView as CardView
-        val child = parent.getChildAt(0) as FrameLayout
-        val grandChild = child.getChildAt(0) as ConstraintLayout
-        grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
+    private fun setItemPriority(position: Int) {
+        val parentView = allItems[position]?.itemView as View
+        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
 
-        holder.checkedImg.visibility = View.GONE
-        holder.isPriority = true
+        allItems[position].checkedImg.visibility = View.GONE
+        allItems[position].isPriority = true
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var isPriority = false
+        var isSelected = false
 
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
