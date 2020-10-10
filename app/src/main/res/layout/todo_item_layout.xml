@@ -75,8 +75,9 @@
             android:id="@+id/imgChecked"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginHorizontal="@dimen/small_margin"
             android:src="@drawable/ic_checked"
-            android:layout_gravity="right|bottom"/>
+            android:layout_gravity="left|bottom"/>
 
     </FrameLayout>
 
