@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_priority"
-        android:icon="@drawable/ic_priority_light"
+        android:icon="@drawable/ic_toggle_priority_light"
         android:title="@string/delete"
         android:visible="false"
         app:showAsAction="always"/>
@@ -21,7 +21,5 @@
         android:visible="false"
         android:enabled="false"
         app:showAsAction="always"/>
-
-
 
 </menu>
