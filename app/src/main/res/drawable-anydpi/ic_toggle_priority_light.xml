@@ -7,5 +7,5 @@
     android:alpha="0.8">
   <path
       android:fillColor="@android:color/white"
-      android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM13,17h-2v-2h2v2zM13,13h-2L11,7h2v6z"/>
+      android:pathData="M14,5h8v2h-8zM14,10.5h8v2h-8zM14,16h8v2h-8zM2,11.5C2,15.08 4.92,18 8.5,18L9,18v2l3,-3 -3,-3v2h-0.5C6.02,16 4,13.98 4,11.5S6.02,7 8.5,7L12,7L12,5L8.5,5C4.92,5 2,7.92 2,11.5z"/>
 </vector>
