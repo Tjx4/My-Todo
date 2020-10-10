@@ -42,30 +42,31 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         val dueDate = todoItem.dueDate
         holder.dueDateTv.text = "Due on $dueDate"
 
-        if(allItems[position].isPriority){
-            setItemPriority(position)
+        if(todoItem.priority){
+            setItemPriority(holder)
         }
 
-        if(allItems[position].isSelected) {
-            setItemSelected(position)
+        if(holder.checkedImg.visibility == View.VISIBLE) {
+            setItemSelected(holder)
         }
 
-        handleItemClicks(holder, position)
+        handleItemClicks(holder, todoItem, position)
     }
 
     private fun handleItemClicks(
         holder: ViewHolder,
+        todoItem: TodoItem,
         position: Int
     ) {
         holder.itemView.setOnClickListener() {
             selectedPos = holder.layoutPosition
 
-            if(allItems[position].isSelected) {
+            if(holder.checkedImg.visibility == View.VISIBLE) {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(position)
+                deselectItem(holder)
 
-                if(allItems[position].isPriority){
-                    setItemPriority(position)
+                if(todoItem.priority){
+                    setItemPriority(holder)
                 }
             }
             else {
@@ -81,7 +82,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
                 } else {
                     dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
-                    setItemSelected(position)
+                    setItemSelected(holder)
                 }
             }
         }
@@ -89,17 +90,17 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         holder.itemView.setOnLongClickListener {
             selectedPos = holder.layoutPosition
 
-            if(allItems[position].isSelected){
+            if(holder.checkedImg.visibility == View.VISIBLE){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(position)
+                deselectItem(holder)
 
-                if(allItems[position].isPriority){
-                    setItemPriority(position)
+                if(todoItem.priority){
+                    setItemPriority(holder)
                 }
             }
             else{
                 dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
-                setItemSelected(position)
+                setItemSelected(holder)
             }
 
             true
@@ -109,45 +110,39 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
     fun deselectAllItem(){
         var indx = 0
         allItems.forEach() {
-            deselectItem(indx)
+            deselectItem(it)
 
-            if(it.isPriority){
-                setItemPriority(indx)
+            val pos= if(it.position < 0)  0 else it.position
+            if(todoItems[pos]?.priority){
+                setItemPriority(it)
             }
 
             indx++
         }
     }
 
-    private fun deselectItem(position: Int) {
-        val parentView = allItems[position]?.itemView as View
+    private fun deselectItem(holder: ViewHolder) {
+        val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.top_border)
 
-        allItems[position].checkedImg.visibility = View.GONE
-        allItems[position].isSelected
-        allItems[position].isSelected = false
+        holder.checkedImg.visibility = View.GONE
     }
 
-    private fun setItemSelected(position: Int) {
-        val parentView = allItems[position]?.itemView as View
+    private fun setItemSelected(holder: ViewHolder) {
+        val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
 
-        allItems[position].checkedImg.visibility = View.VISIBLE
-        allItems[position].isSelected = true
+        holder.checkedImg.visibility = View.VISIBLE
     }
 
-    private fun setItemPriority(position: Int) {
-        val parentView = allItems[position]?.itemView as View
+    private fun setItemPriority(holder: ViewHolder) {
+        val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
 
-        allItems[position].checkedImg.visibility = View.GONE
-        allItems[position].isPriority = true
+        holder.checkedImg.visibility = View.GONE
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var isPriority = false
-        var isSelected = false
-
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
         internal var dueDateTv = itemView.findViewById<TextView>(R.id.tvDueDate)
