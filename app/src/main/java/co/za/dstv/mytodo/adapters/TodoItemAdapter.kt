@@ -40,9 +40,9 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         holder.doneCb.isChecked = todoItem.complete
 
         //Todo: check if over due
-        val due = todoItem.dueDate
-        holder.dueDateTv.text = "Due on $due"
-        if(due == null){
+        val dueDate = todoItem.dueDate
+        holder.dueDateTv.text = "Due on $dueDate"
+        if(dueDate == null){
             holder.dueDateTv.visibility = View.INVISIBLE
         }
 

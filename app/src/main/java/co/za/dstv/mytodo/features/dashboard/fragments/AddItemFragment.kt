@@ -1,31 +1,26 @@
 package co.za.dstv.mytodo.features.dashboard.fragments
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.ImageButton
-import android.widget.ScrollView
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.FragmentAddItemBinding
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
-import co.za.dstv.mytodo.helpers.getDateAndTimeFromDateFormat
-import java.util.*
-
+import co.za.dstv.mytodo.helpers.getFormatedDateAndTime
 
 class AddItemFragment : BaseDialogFragment() {
     private var dashboardActivity: DashboardActivity? = null
      lateinit var binding: FragmentAddItemBinding
      lateinit var closeSaveLocationListImgB: ImageButton
-     lateinit var signInBtn: Button
+     lateinit var addTodoItemBtn: Button
      lateinit var dueDateDp: DatePicker
+     lateinit var dueTimeTp: TimePicker
      lateinit var errorContainer: View
      lateinit var contentSv: ScrollView
 
@@ -49,21 +44,6 @@ class AddItemFragment : BaseDialogFragment() {
         errorContainer = parentView.findViewById(R.id.clErrorContainer)
         contentSv = parentView.findViewById(R.id.svContent)
 
-        dueDateDp = parentView.findViewById(R.id.dpDueDate)
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        dueDateDp.init(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ) { datePicker, year, month, dayOfMonth ->
-            val correctMonth = month + 1
-            val selectedDate = getDateAndTimeFromDateFormat(year, correctMonth, dayOfMonth)
-            val date = selectedDate.format(Date())
-
-            dashboardActivity?.dashboardViewModel?.setDueDate(date)
-        }
-
         closeSaveLocationListImgB = parentView.findViewById(R.id.imgBCloseSaveLocationList)
         closeSaveLocationListImgB.setOnClickListener {
             dashboardActivity?.dashboardViewModel?.newItem?.value?.title = ""
@@ -71,10 +51,19 @@ class AddItemFragment : BaseDialogFragment() {
             dismiss()
         }
 
-        signInBtn = parentView.findViewById(R.id.btnSignIn)
-        signInBtn.setOnClickListener {
+        dueDateDp = parentView.findViewById(R.id.dpDueDate)
+        dueTimeTp = parentView.findViewById(R.id.tpDueTime)
+
+        addTodoItemBtn = parentView.findViewById(R.id.btnAddTodoItem)
+        addTodoItemBtn.setOnClickListener {
+            setDueDateAndTime()
             dashboardActivity?.dashboardViewModel?.checkAndAddItem()
         }
+    }
+
+    private fun setDueDateAndTime() {
+        val selectedDateTime = getFormatedDateAndTime(dueDateDp.dayOfMonth, dueDateDp.month + 1, dueDateDp.year, dueTimeTp.hour, dueTimeTp.minute)
+        dashboardActivity?.dashboardViewModel?.setDueDate(selectedDateTime)
     }
 
     override fun onAttach(context: Context) {

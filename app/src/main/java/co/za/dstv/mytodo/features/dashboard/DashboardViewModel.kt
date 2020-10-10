@@ -6,7 +6,7 @@ import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.extensions.isValidDescription
 import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
-import co.za.dstv.mytodo.helpers.getDateAndTime
+import co.za.dstv.mytodo.helpers.getCurrentDateAndTime
 import co.za.dstv.mytodo.models.DbOperationResult
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.coroutines.delay
@@ -130,7 +130,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             // Todo: remove just for demo purposes
             delay(1000)
 
-            _newItem.value?.dateCreated = getDateAndTime()
+            _newItem.value?.dateCreated = getCurrentDateAndTime()
             val addItem = addNewTodoListItem()
 
             uiScope.launch {
@@ -162,9 +162,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _showLoading.value = true
 
         ioScope.launch {
-            // Todo: remove just for demo purposes
-            delay(1500)
-
             var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
 
             uiScope.launch {
@@ -203,9 +200,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                 _showContent.value = true
             }
         }
-
     }
-
 
     fun checkIsValidTitle(title: String?): Boolean {
         return title?.isValidTitle() ?: false

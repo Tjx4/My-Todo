@@ -5,12 +5,13 @@
     <color name="colorAccent">#0088cc</color>
     <color name="progressBackground">#666</color>
     <color name="itemSelectedBackground">#DDD</color>
-    <color name="darkGrey">#CCC</color>
     <color name="lightGreyText">#999</color>
     <color name="lightText">#DDD</color>
     <color name="darkText">#111</color>
     <color name="lightBackground">#FFF</color>
-    <color name="greyBackground">#EEE</color>
+    <color name="darkGrey">#CCC</color>
+    <color name="midGrey">#EEE</color>
+    <color name="lightGrey">#F3F3F3</color>
     <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
     <color name="errorBackground">#dd0055</color>
