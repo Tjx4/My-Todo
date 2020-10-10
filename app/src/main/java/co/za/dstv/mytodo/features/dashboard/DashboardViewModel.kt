@@ -190,6 +190,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             uiScope.launch {
                 if(priorityItems.success){
                     _checkList.value?.clear()
+                    // update list view
                     displayTodoItems()
                 }
                 else{

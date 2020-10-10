@@ -41,12 +41,13 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
 
         val dueDate = todoItem.dueDate
         holder.dueDateTv.text = "Due on $dueDate"
-        if(dueDate == null){
-            holder.dueDateTv.visibility = View.INVISIBLE
-        }
 
         if(todoItem.priority){
             setItemPriority(holder)
+        }
+
+        if(allItems[position].itemView.isSelected) {
+            setItemSelected(holder)
         }
 
         handleItemClicks(holder, position)
@@ -110,7 +111,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         allItems.forEach() {
             deselectItem(it)
 
-            if(todoItems[indx].priority){
+            if(it.isPriority){
                 setItemPriority(it)
             }
 
@@ -151,10 +152,12 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         grandChild.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
 
         holder.checkedImg.visibility = View.GONE
-        // holder.itemView.isSelected = false
+        holder.isPriority = true
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        var isPriority = false
+
         internal var titleTv = itemView.findViewById<TextView>(R.id.tvTitle)
         internal var descriptionTv = itemView.findViewById<TextView>(R.id.tvDescription)
         internal var dueDateTv = itemView.findViewById<TextView>(R.id.tvDueDate)
@@ -168,7 +171,6 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         override fun onClick(view: View) {
             todoItemClickListener?.onServiceCategoryClick(view, adapterPosition)
         }
-
     }
 
     internal fun getItem(id: Int): TodoItem? {

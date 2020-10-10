@@ -75,7 +75,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         tvNoItems.visibility = View.VISIBLE
     }
 
-
     private fun onShowLoading(isBusy: Boolean) {
         clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
@@ -106,7 +105,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         todoItemAdapter = TodoItemAdapter(this, todoItems)
         todoItemAdapter?.setTodoClickListener(this)
+
+
         rvItems.adapter = todoItemAdapter
+        // rvItems.adapter?.notifyDataSetChanged()
 
         rvItems.visibility = View.VISIBLE
         tvNoItems.visibility = View.GONE
