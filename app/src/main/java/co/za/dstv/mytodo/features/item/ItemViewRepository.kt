@@ -2,13 +2,13 @@ package co.za.dstv.mytodo.features.item
 
 import co.za.dstv.mytodo.features.database.TodoDb
 import co.za.dstv.mytodo.features.database.tables.TodoItemsTable
-import co.za.dstv.mytodo.models.DbOperationResult
+import co.za.dstv.mytodo.models.DbOperation
 import co.za.dstv.mytodo.models.TodoItem
 import java.lang.Exception
 
 class ItemViewRepository(var database: TodoDb) {
 
-    suspend fun setItemAsComplete(items : List<TodoItem?>): DbOperationResult {
+    suspend fun setItemAsComplete(items : List<TodoItem?>): DbOperation {
         return try {
             val completeItemList = arrayListOf<TodoItemsTable>()
 
@@ -20,10 +20,10 @@ class ItemViewRepository(var database: TodoDb) {
             }
             database.todoItemsDao.update(completeItemList)
 
-            return DbOperationResult(true)
+            return DbOperation(true)
         }
         catch (ex: Exception){
-            return DbOperationResult(false)
+            return DbOperation(false)
         }
     }
 }

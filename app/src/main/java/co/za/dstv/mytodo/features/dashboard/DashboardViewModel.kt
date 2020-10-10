@@ -7,7 +7,7 @@ import co.za.dstv.mytodo.extensions.isValidDescription
 import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.helpers.getCurrentDateAndTime
-import co.za.dstv.mytodo.models.DbOperationResult
+import co.za.dstv.mytodo.models.DbOperation
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,7 +63,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     init {
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
-        displayTodoItems()
     }
 
     fun checkItems(itemCount: Int){
@@ -131,7 +130,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             delay(1000)
 
             _newItem.value?.dateCreated = getCurrentDateAndTime()
-            val addItem = addNewTodoListItem()
+            val addItem = addNewTodoListItem(newItem.value!!)
 
             uiScope.launch {
 
@@ -148,8 +147,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
     }
 
-    suspend fun addNewTodoListItem(): DbOperationResult {
-        return dashboardRepository.addItemToDb(_newItem.value!!)
+    suspend fun addNewTodoListItem(todoItem:TodoItem): DbOperation {
+        return dashboardRepository.addItemToDb(todoItem)
     }
 
     fun deleteSelectedItems(){

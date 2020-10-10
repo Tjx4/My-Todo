@@ -108,7 +108,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
 
     fun deselectAllItem(){
         var indx = 0
-        allItems.forEach(){
+        allItems.forEach() {
             deselectItem(it)
 
             if(todoItems[indx].priority){
