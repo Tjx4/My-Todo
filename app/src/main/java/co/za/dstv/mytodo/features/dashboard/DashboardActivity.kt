@@ -49,8 +49,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addObservers()
 
         iniViews()
-
-        supportActionBar?.title = getString(R.string.todo_list)
     }
 
     override fun onResume() {
@@ -97,7 +95,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         hideCurrentLoadingDialog(this)
         clCParent.visibility = View.VISIBLE
 
-        supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.title = getString(R.string.todo_list)
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true

@@ -126,7 +126,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _showLoading.value = true
 
         ioScope.launch {
-            // Todo: remove just for demo purposes
             delay(1000)
 
             _newItem.value?.dateCreated = getCurrentDateAndTime()
