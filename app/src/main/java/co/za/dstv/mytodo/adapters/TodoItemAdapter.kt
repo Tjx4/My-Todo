@@ -113,6 +113,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
             deselectItem(it)
 
             val pos= if(it.position < 0)  0 else it.position
+
             if(todoItems[pos]?.priority){
                 setItemPriority(it)
             }

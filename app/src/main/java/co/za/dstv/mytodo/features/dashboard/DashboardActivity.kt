@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
+import co.za.dstv.mytodo.extensions.blinkView
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
 import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
@@ -131,7 +133,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onError(errorMessage: String) {
-        addItemFragment.errorContainer.visibility = View.VISIBLE
+        addItemFragment.errorContainer.blinkView(0.6f, 1.0f, 50, 2, Animation.ABSOLUTE, 0, {
+            addItemFragment.errorContainer.visibility = View.VISIBLE
+        })
+
         addItemFragment.contentSv.smoothScrollTo(0,0)
     }
 

@@ -61,29 +61,45 @@
 
             <TextView
                 style="@style/MediumDarkTextView"
-                android:gravity="center"
+                android:layout_width="0dp"
+                android:gravity="left"
                 android:singleLine="true"
                 android:text="Create a new todo item"
                 android:textStyle="bold"
-                android:textSize="@dimen/medium_plus_text"
                 android:paddingLeft="@dimen/small_padding"
                 android:paddingRight="@dimen/large_padding"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/btnAddTodoItem"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageButton
-                android:id="@+id/imgBCloseSaveLocationList"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:padding="8dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_close_dark"
+            <Button
+                style="@style/AddItemButtons"
+                android:id="@+id/btnAddTodoItem"
+                android:text="@string/save_item"
+                app:layout_constraintRight_toLeftOf="@+id/vSeparator"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <View
+                android:id="@+id/vSeparator"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:background="@color/midGrey"
+                android:layout_marginVertical="@dimen/small_margin"
+                android:layout_marginHorizontal="0dp"
+                app:layout_constraintRight_toLeftOf="@+id/btnCloseSaveLocationList"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <Button
+                style="@style/AddItemButtons"
+                android:id="@+id/btnCloseSaveLocationList"
+                android:text="Cancel"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -166,15 +182,6 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvDueTime"/>
-
-                <Button
-                    style="@style/TodoButton"
-                    android:id="@+id/btnAddTodoItem"
-                    android:layout_width="match_parent"
-                    android:text="@string/save_item"
-                    android:layout_marginTop="@dimen/medium_margin"
-                    android:layout_marginHorizontal="@dimen/medium_margin"
-                    app:layout_constraintTop_toBottomOf="@+id/tpDueTime" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

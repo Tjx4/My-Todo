@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.extensions.isValidDescription
+import co.za.dstv.mytodo.extensions.isValidDueDate
 import co.za.dstv.mytodo.extensions.isValidTitle
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.helpers.getCurrentDateAndTime
@@ -122,6 +123,11 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             return
         }
 
+        if(!checkIsValidDueDate(_newItem.value?.dueDate)){
+            _errorMessage.value = "Please enter a date later than an hour from now"
+            return
+        }
+
         busyMessage = "Adding item please wait..."
         _showLoading.value = true
 
@@ -208,5 +214,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
     fun checkIsValidDescription(description: String?): Boolean {
         return description?.isValidDescription() ?: false
+    }
+
+    fun checkIsValidDueDate(dueDate: String?): Boolean {
+        return dueDate?.isValidDueDate() ?: false
     }
 }

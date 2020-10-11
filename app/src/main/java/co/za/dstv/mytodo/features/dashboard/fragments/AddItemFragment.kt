@@ -6,10 +6,12 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.FragmentAddItemBinding
+import co.za.dstv.mytodo.extensions.blinkView
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.helpers.getFormatedDateAndTime
@@ -17,7 +19,7 @@ import co.za.dstv.mytodo.helpers.getFormatedDateAndTime
 class AddItemFragment : BaseDialogFragment() {
     private var dashboardActivity: DashboardActivity? = null
      lateinit var binding: FragmentAddItemBinding
-     lateinit var closeSaveLocationListImgB: ImageButton
+     lateinit var closeSaveLocationListButton: Button
      lateinit var addTodoItemBtn: Button
      lateinit var dueDateDp: DatePicker
      lateinit var dueTimeTp: TimePicker
@@ -44,8 +46,8 @@ class AddItemFragment : BaseDialogFragment() {
         errorContainer = parentView.findViewById(R.id.clErrorContainer)
         contentSv = parentView.findViewById(R.id.svContent)
 
-        closeSaveLocationListImgB = parentView.findViewById(R.id.imgBCloseSaveLocationList)
-        closeSaveLocationListImgB.setOnClickListener {
+        closeSaveLocationListButton = parentView.findViewById(R.id.btnCloseSaveLocationList)
+        closeSaveLocationListButton.setOnClickListener {
             dashboardActivity?.dashboardViewModel?.newItem?.value?.title = ""
             dashboardActivity?.dashboardViewModel?.newItem?.value?.description = ""
             dismiss()
