@@ -18,4 +18,5 @@
     <string name="todo_list">To Do List</string>
     <string name="item_description">Todo item description</string>
     <string name="due_on">Due on</string>
+    <string name="item_completed">Item completed</string>
 </resources>

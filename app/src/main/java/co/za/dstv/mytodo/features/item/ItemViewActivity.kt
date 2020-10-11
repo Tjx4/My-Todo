@@ -58,6 +58,8 @@ class ItemViewActivity : BaseChildActivity() {
     }
 
     fun onUpdated(isUpdated: Boolean){
-        Toast.makeText(this, "Item updated", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.item_completed), Toast.LENGTH_LONG).show()
+        btnSetComplete.visibility = View.GONE
+        llItemComplete.visibility = View.VISIBLE
     }
 }
