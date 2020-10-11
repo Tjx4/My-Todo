@@ -49,6 +49,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addObservers()
 
         iniViews()
+
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setIcon(R.drawable.ic_burger_menu)
     }
 
     override fun onResume() {
