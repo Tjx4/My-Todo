@@ -14,15 +14,80 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:layout_height="match_parent"
     tools:context=".features.item.ItemViewActivity">
 
+    <TextView
+        android:id="@+id/tvDescription"
+        style="@style/MediumDarkTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        tools:text="@string/item_description"
+        android:text="@{itemViewViewModel.todoItem.description}"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCreationDate"
+        style="@style/MediumDarkTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        tools:text="Created on"
+        android:text="@{itemViewViewModel.todoItem.dateCreated}"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <TextView
+        android:id="@+id/tvDueDate"
+        style="@style/MediumDarkTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        tools:text="@string/due_on"
+        android:text="@{itemViewViewModel.todoItem.dueDate}"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreationDate" />
+
     <Button
         style="@style/TodoButton"
         android:id="@+id/btnSetComplete"
         android:layout_width="match_parent"
-        android:text="Set complete"
+        android:text="Set Item Complete"
         android:onClick="onSetCompleteButtonClicked"
         android:layout_margin="@dimen/large__margin"
         android:layout_marginHorizontal="@dimen/medium_margin"
-        app:layout_constraintTop_toTopOf="parent"  />
+        app:layout_constraintTop_toBottomOf="@+id/tvDueDate"  />
+
+    <LinearLayout
+        android:id="@+id/llItemComplete"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large__margin"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        app:layout_constraintTop_toBottomOf="@+id/tvDueDate"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_complete"/>
+
+        <TextView
+            style="@style/MediumDarkTextView"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:text="Item complete"  />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

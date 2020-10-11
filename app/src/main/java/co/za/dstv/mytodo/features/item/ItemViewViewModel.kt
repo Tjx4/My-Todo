@@ -9,19 +9,13 @@ import kotlinx.coroutines.launch
 
 class ItemViewViewModel(application: Application, private val itemViewRepository: ItemViewRepository) : BaseVieModel(application) {
 
-    private var _showLoading: MutableLiveData<Boolean> = MutableLiveData()
-    val showLoading: MutableLiveData<Boolean>
-    get() = _showLoading
-
-    var busyMessage: String = "Please wait..."
+    private var _isComplete: MutableLiveData<Boolean> = MutableLiveData()
+    val isComplete: MutableLiveData<Boolean>
+    get() = _isComplete
 
     private var _errorMessage: MutableLiveData<String> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
         get() = _errorMessage
-
-    private val _showContent: MutableLiveData<Boolean> = MutableLiveData()
-    val showContent: MutableLiveData<Boolean>
-        get() = _showContent
 
     private var _todoItem: MutableLiveData<TodoItem> = MutableLiveData()
     var todoItem: MutableLiveData<TodoItem> = MutableLiveData()
@@ -31,6 +25,16 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
     val updated: MutableLiveData<Boolean>
         get() = _updated
 
+    init {
+
+    }
+
+    fun checkAndShowItemComplete(todoItem: TodoItem?){
+        val isComplete = _todoItem.value?.complete ?: false
+        if(isComplete) {
+            _isComplete.value = true
+        }
+    }
 
     fun setTodoItem(todoItem: TodoItem?){
         _todoItem.value = todoItem
@@ -49,8 +53,6 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
                 else{
                     _errorMessage.value = app.getString(R.string.priority_error_message)
                 }
-
-                _showContent.value = true
             }
         }
 

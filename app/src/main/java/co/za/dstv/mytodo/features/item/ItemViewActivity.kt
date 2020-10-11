@@ -11,8 +11,8 @@ import co.za.dstv.mytodo.constants.PAYLOAD_KEY
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.databinding.ActivityItemViewBinding
 import co.za.dstv.mytodo.features.base.activities.BaseChildActivity
-import co.za.dstv.mytodo.helpers.showLoadingDialog
 import co.za.dstv.mytodo.models.TodoItem
+import kotlinx.android.synthetic.main.activity_item_view.*
 
 class ItemViewActivity : BaseChildActivity() {
     private lateinit var binding: ActivityItemViewBinding
@@ -35,19 +35,22 @@ class ItemViewActivity : BaseChildActivity() {
         var item = intent.getBundleExtra(PAYLOAD_KEY).getParcelable<TodoItem>(TODO_ITEM_KEY)
         itemViewViewModel.setTodoItem(item)
 
-
         supportActionBar?.title = item?.title
     }
 
     private fun addObservers() {
-        itemViewViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
+        itemViewViewModel.todoItem.observe(this, Observer { isItemSet(it) })
+        itemViewViewModel.isComplete.observe(this, Observer { isItemComplete(it) })
         itemViewViewModel.updated.observe(this, Observer { onUpdated(it) })
     }
 
+    private fun isItemSet(todoItem: TodoItem?) {
+        itemViewViewModel.checkAndShowItemComplete(todoItem)
+    }
 
-    private fun onShowLoading(isBusy: Boolean) {
-        //clCParent.visibility = View.INVISIBLE
-        showLoadingDialog(itemViewViewModel.busyMessage, this)
+    private fun isItemComplete(isComplete: Boolean) {
+        btnSetComplete.visibility = View.GONE
+        llItemComplete.visibility = View.VISIBLE
     }
 
     fun onSetCompleteButtonClicked(view: View){
