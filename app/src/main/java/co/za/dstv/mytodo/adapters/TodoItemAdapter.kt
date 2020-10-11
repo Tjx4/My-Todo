@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
@@ -124,21 +121,21 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
 
     private fun deselectItem(holder: ViewHolder) {
         val parentView = holder?.itemView as View
-        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border)
+        parentView.background = dashboardActivity.getDrawable(R.drawable.list_item)
 
         holder.checkedImg.visibility = View.GONE
     }
 
     private fun setItemSelected(holder: ViewHolder) {
         val parentView = holder?.itemView as View
-        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_selected)
+        parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_selected)
 
         holder.checkedImg.visibility = View.VISIBLE
     }
 
     private fun setItemPriority(holder: ViewHolder) {
         val parentView = holder?.itemView as View
-        parentView.background = dashboardActivity.getDrawable(R.drawable.top_border_priority)
+        parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_priority)
 
         holder.checkedImg.visibility = View.GONE
     }

@@ -93,10 +93,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
        android:id="@+id/rvItems"
        android:layout_width="match_parent"
        android:layout_height="0dp"
+       android:paddingVertical="2dp"
        android:layout_marginBottom="@dimen/small_margin"
        app:layout_constraintTop_toBottomOf="@+id/cvProgress"
        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
-       android:background="?attr/selectableItemBackground"/>
+       android:background="@color/midGrey"/>
 
     <TextView
         android:visibility="gone"
