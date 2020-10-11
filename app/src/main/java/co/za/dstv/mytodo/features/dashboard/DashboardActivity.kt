@@ -32,6 +32,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private var todoItemAdapter: TodoItemAdapter? = null
     private var deleteMenuItem: MenuItem? = null
     private var priorityMenuItem: MenuItem? = null
+    private var exitMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addObservers()
 
         iniViews()
+
+        supportActionBar?.title = getString(R.string.todo_list)
     }
 
     override fun onResume() {
@@ -87,6 +90,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
         deleteMenuItem?.isVisible = true
         priorityMenuItem?.isVisible = true
+        exitMenuItem?.isVisible = false
     }
 
     private fun onShowContent(showContent: Boolean) {
@@ -96,6 +100,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         supportActionBar?.title = getString(R.string.app_name)
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
+        exitMenuItem?.isVisible = true
     }
 
     private fun onCheckListUpdated(items: MutableList<Int>) {
@@ -154,6 +159,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         menuInflater.inflate(R.menu.dashboard_menu, menu)
         deleteMenuItem = menu.findItem(R.id.action_delette_item)
         priorityMenuItem = menu.findItem(R.id.action_priority)
+        exitMenuItem = menu.findItem(R.id.action_exit)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -164,6 +170,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             }
             R.id.action_priority -> {
                 dashboardViewModel.setPriorityOnSelectedItems()
+            }
+            R.id.action_exit -> {
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)

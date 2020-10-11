@@ -17,9 +17,9 @@
         app:showAsAction="always"/>
 
     <item
-        android:title="decoy"
-        android:visible="false"
-        android:enabled="false"
-        app:showAsAction="always"/>
+        android:id="@+id/action_exit"
+        android:icon="@drawable/ic_exit_light"
+        android:title="@string/exit"
+        app:showAsAction="never"/>
 
 </menu>

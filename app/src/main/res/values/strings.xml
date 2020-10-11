@@ -15,4 +15,6 @@
     <string name="item_delete_error">Sorry we were unable to delete your items, please try again</string>
     <string name="item_deleted">Item deleted</string>
     <string name="priority_error_message">Error setting priority</string>
+    <string name="exit">Exit</string>
+    <string name="todo_list">To Do List</string>
 </resources>

@@ -74,7 +74,7 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
                 if (isEmptyCheckList) {
-                    notifyItemChanged(selectedPos)
+                    notifyItemChanged(position)
 
                     val item =  todoItems[position]
                     var payload = Bundle()
