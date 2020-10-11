@@ -8,10 +8,11 @@
     <color name="lightGreyText">#999</color>
     <color name="lightText">#DDD</color>
     <color name="darkText">#111</color>
+    <color name="greyText">#888</color>
     <color name="lightBackground">#FFF</color>
     <color name="darkGrey">#CCC</color>
     <color name="midGrey">#EEE</color>
-    <color name="lightGrey">#F3F3F3</color>
+    <color name="lightGrey">#F5F5F5</color>
     <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
     <color name="errorBackground">#dd0055</color>

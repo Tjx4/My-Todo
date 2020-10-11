@@ -12,9 +12,9 @@ fun getFormatedDateAndTime(day: Int, month: Int, year: Int, hour: Int, minute: I
     return "$day/$month/$year $hour:$minute"
 }
 
-fun setHourAhead(currentHour: Int): Int {
+fun getHourAhead(currentHour: Int): Int {
     val hour = currentHour + 1
-    return if(hour > 12)  1 else hour
+    return if(hour > 23) 0 else hour
 }
 
 fun getTimeBetween(dateTimeFrom: String, dateTimeTo: String): String {

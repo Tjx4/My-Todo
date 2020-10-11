@@ -6,16 +6,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.databinding.FragmentAddItemBinding
-import co.za.dstv.mytodo.extensions.blinkView
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.helpers.getFormatedDateAndTime
-import co.za.dstv.mytodo.helpers.setHourAhead
+import co.za.dstv.mytodo.helpers.getHourAhead
 
 class AddItemFragment : BaseDialogFragment() {
     private var dashboardActivity: DashboardActivity? = null
@@ -56,7 +54,7 @@ class AddItemFragment : BaseDialogFragment() {
 
         dueDateDp = parentView.findViewById(R.id.dpDueDate)
         dueTimeTp = parentView.findViewById(R.id.tpDueTime)
-        dueTimeTp.hour =  setHourAhead(dueTimeTp.hour)
+        dueTimeTp.hour = getHourAhead(dueTimeTp.hour)
 
         addTodoItemBtn = parentView.findViewById(R.id.btnAddTodoItem)
         addTodoItemBtn.setOnClickListener {
