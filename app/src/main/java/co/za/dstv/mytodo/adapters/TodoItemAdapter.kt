@@ -39,17 +39,17 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         val dueDate = todoItem.dueDate
         holder.dueDateTv.text = "Due on $dueDate"
 
-        if(todoItem.priority){
-            setItemPriority(holder)
-        }
-        else{
-            deselectItem(holder)
-        }
-
         if(holder.checkedImg.visibility == View.VISIBLE) {
             setItemSelected(holder)
         }
-        
+        else{
+            if(todoItem.priority){
+                setItemPriority(holder)
+            }
+            else{
+                deselectItem(holder)
+            }
+        }
 
         handleItemClicks(holder, todoItem, position)
     }

@@ -48,6 +48,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
             <SeekBar
+                android:id="@+id/sbProgress"
                 style="@style/ProgressBarStyle"
                 android:layout_width="0dp"
                 android:layout_height="4dp"
@@ -64,6 +65,16 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/tvProgressPcnt"
                 app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+            <View
+                android:background="@android:color/transparent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="@+id/sbProgress"
+                app:layout_constraintRight_toRightOf="@+id/sbProgress"
+                app:layout_constraintTop_toTopOf="@+id/sbProgress"
+                app:layout_constraintBottom_toBottomOf="@+id/sbProgress"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/tvProgressPcnt"
