@@ -91,6 +91,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     fun displayTodoItems(){
         ioScope.launch {
             val todoItems = dashboardRepository.getItemsFromDb()
+
             uiScope.launch {
                 var completed = 0
                 todoItems.forEach {
@@ -150,17 +151,18 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         return dashboardRepository.addItemToDb(todoItem)
     }
 
-    fun deleteSelectedItems(){
+    fun checkAndDeleteItems(){
         val itemsDeleteList = arrayListOf<TodoItem?>()
         _checkList.value?.forEach {
             itemsDeleteList.add(todoItems.value?.get(it))
         }
 
-        busyMessage = "Busy deleting please wait"
-        _showLoading.value = true
+        if(itemsDeleteList.isNullOrEmpty()){
+            return
+        }
 
         ioScope.launch {
-            var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
+            var deleteItems = deleteSelectedItemss(itemsDeleteList)
 
             uiScope.launch {
 
@@ -175,6 +177,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                 _showContent.value = true
             }
         }
+    }
+
+    suspend fun deleteSelectedItemss(todoItems: List<TodoItem?>): DbOperation {
+        return dashboardRepository.deleteItemsFromDb(todoItems)
     }
 
     fun setPriorityOnSelectedItems(){

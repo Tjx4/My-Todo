@@ -77,6 +77,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onNoItems(isNoItems: Boolean) {
+        llLoading.visibility = View.GONE
         rvItems.visibility = View.GONE
         tvNoItems.visibility = View.VISIBLE
     }
@@ -89,6 +90,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     fun setSelectionMode(isSelectionMode: Boolean) {
         val itemCount = dashboardViewModel.checkList.value?.size
         supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
+        supportActionBar?.setDisplayShowHomeEnabled(false)
+
         deleteMenuItem?.isVisible = true
         priorityMenuItem?.isVisible = true
         exitMenuItem?.isVisible = false
@@ -99,6 +102,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         clCParent.visibility = View.VISIBLE
 
         supportActionBar?.title = getString(R.string.todo_list)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setIcon(R.drawable.ic_burger_menu)
+
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true
@@ -110,15 +116,12 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
         todRvLayoutManager.initialPrefetchItemCount = todoItems.size
-
         todoItemAdapter = TodoItemAdapter(this, todoItems)
         todoItemAdapter?.setTodoClickListener(this)
-
-
         rvItems.adapter = todoItemAdapter
-        // rvItems.adapter?.notifyDataSetChanged()
 
         rvItems.visibility = View.VISIBLE
+        llLoading.visibility = View.GONE
         tvNoItems.visibility = View.GONE
     }
 
@@ -167,7 +170,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
-                dashboardViewModel.deleteSelectedItems()
+                dashboardViewModel.checkAndDeleteItems()
             }
             R.id.action_priority -> {
                 dashboardViewModel.setPriorityOnSelectedItems()

@@ -15,7 +15,7 @@
     <string name="item_deleted">Item deleted</string>
     <string name="priority_error_message">Error setting priority</string>
     <string name="exit">Exit</string>
-    <string name="todo_list"> \u0020\u0020\u0020To Do List</string>
+    <string name="todo_list"> \u0020\u0020\u0020\u0020To Do List</string>
     <string name="item_description">Todo item description</string>
     <string name="due_on">Due on</string>
     <string name="item_completed">Item completed</string>
