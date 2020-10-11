@@ -15,6 +15,7 @@ import co.za.dstv.mytodo.extensions.blinkView
 import co.za.dstv.mytodo.features.base.fragments.BaseDialogFragment
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.helpers.getFormatedDateAndTime
+import co.za.dstv.mytodo.helpers.setHourAhead
 
 class AddItemFragment : BaseDialogFragment() {
     private var dashboardActivity: DashboardActivity? = null
@@ -55,6 +56,7 @@ class AddItemFragment : BaseDialogFragment() {
 
         dueDateDp = parentView.findViewById(R.id.dpDueDate)
         dueTimeTp = parentView.findViewById(R.id.tpDueTime)
+        dueTimeTp.hour =  setHourAhead(dueTimeTp.hour)
 
         addTodoItemBtn = parentView.findViewById(R.id.btnAddTodoItem)
         addTodoItemBtn.setOnClickListener {
