@@ -17,10 +17,10 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="1000dp" />
-            <solid android:color="@color/colorPrimary" />
+            <solid android:color="@color/darkButtonClickedBackground" />
             <stroke
                 android:width="2dp"
-                android:color="@color/colorPrimary" />
+                android:color="@color/darkButtonClickedBackground" />
             <padding
                 android:bottom="4dp"
                 android:left="4dp"

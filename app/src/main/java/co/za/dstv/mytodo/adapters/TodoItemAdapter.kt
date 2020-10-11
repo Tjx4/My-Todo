@@ -42,10 +42,14 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
         if(todoItem.priority){
             setItemPriority(holder)
         }
+        else{
+            deselectItem(holder)
+        }
 
         if(holder.checkedImg.visibility == View.VISIBLE) {
             setItemSelected(holder)
         }
+        
 
         handleItemClicks(holder, todoItem, position)
     }

@@ -13,6 +13,7 @@
     <color name="darkGrey">#CCC</color>
     <color name="midGrey">#EEE</color>
     <color name="lightGrey">#F5F5F5</color>
+    <color name="darkButtonClickedBackground">#333</color>
     <color name="darkBackground">#111</color>
     <color name="editTextBackground">#f4f4f6</color>
     <color name="errorBackground">#dd0055</color>
