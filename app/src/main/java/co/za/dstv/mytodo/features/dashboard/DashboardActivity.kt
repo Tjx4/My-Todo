@@ -56,16 +56,16 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     override fun onResume() {
         super.onResume()
-        dashboardViewModel.displayTodoItems()
+        dashboardViewModel.getItemsAndSetProgress()
     }
 
     private fun addObservers() {
         dashboardViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
-        dashboardViewModel.showContent.observe(this, Observer { onShowContent(it) })
+        dashboardViewModel.isViewMode.observe(this, Observer { setViewMode(it) })
         dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
-        dashboardViewModel.isItemDeleted.observe(this, Observer { onItemDeleted(it) })
+        dashboardViewModel.itemsDeleted.observe(this, Observer { onItemDeleted(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
@@ -97,7 +97,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         exitMenuItem?.isVisible = false
     }
 
-    private fun onShowContent(showContent: Boolean) {
+    private fun setViewMode(showContent: Boolean) {
         hideCurrentLoadingDialog(this)
         clCParent.visibility = View.VISIBLE
 
@@ -117,7 +117,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
         todRvLayoutManager.initialPrefetchItemCount = todoItems.size
         todoItemAdapter = TodoItemAdapter(this, todoItems)
-        todoItemAdapter?.setTodoClickListener(this)
         rvItems.adapter = todoItemAdapter
 
         rvItems.visibility = View.VISIBLE
@@ -132,13 +131,13 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             addItemFragment.dismiss()
-            dashboardViewModel.displayTodoItems()
+            dashboardViewModel.getItemsAndSetProgress()
         }
     }
 
     private fun onItemDeleted(deletedItems: Int) {
         Toast.makeText(this, if(deletedItems == 1) getString(R.string.item_deleted) else "$deletedItems items deleted", Toast.LENGTH_LONG).show()
-        dashboardViewModel.displayTodoItems()
+        dashboardViewModel.getItemsAndSetProgress()
     }
 
     private fun onError(errorMessage: String) {

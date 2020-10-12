@@ -18,9 +18,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
 
-    private val _showContent: MutableLiveData<Boolean> = MutableLiveData()
-    val showContent: MutableLiveData<Boolean>
-        get() = _showContent
+    private val _isViewMode: MutableLiveData<Boolean> = MutableLiveData()
+    val isViewMode: MutableLiveData<Boolean>
+        get() = _isViewMode
 
     private val _isNoItems: MutableLiveData<Boolean> = MutableLiveData()
     val isNoItems: MutableLiveData<Boolean>
@@ -33,7 +33,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         get() = _isItemAdded
 
     private val _isItemsDeleted: MutableLiveData<Int> = MutableLiveData()
-    val isItemDeleted: MutableLiveData<Int>
+    val itemsDeleted: MutableLiveData<Int>
         get() = _isItemsDeleted
 
     private val _todoProgress: MutableLiveData<Int> = MutableLiveData()
@@ -70,7 +70,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             _isSelectionMode.value = true
         }
         else{
-            _showContent.value = true
+            _isViewMode.value = true
         }
     }
 
@@ -88,29 +88,35 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _newItem.value?.dueDate = selectedDateTime
     }
 
-    fun displayTodoItems(){
+    fun getProgress(todoItems: List<TodoItem>): Int{
+        var completed = 0
+        todoItems.forEach {
+            if(it.complete == true){
+                completed++
+            }
+        }
+
+        return  if(todoItems.isNotEmpty()) completed * 100 / todoItems.size else 0
+    }
+
+    fun getItemsAndSetProgress(){
         ioScope.launch {
-            val todoItems = dashboardRepository.getItemsFromDb()
+            val todoItems = getTodoItems()
 
             uiScope.launch {
-                var completed = 0
-                todoItems.forEach {
-                    if(it.complete == true){
-                        completed++
-                    }
-                }
-
-                _todoProgress.value = if(todoItems.isNotEmpty()) completed * 100 / todoItems.size else 0
-
                 if(todoItems.isNullOrEmpty()){
                     _isNoItems.value = true
                 }
                 else{
                     _todoItems.value = todoItems
                 }
+
+                _todoProgress.value = getProgress(todoItems)
             }
         }
     }
+
+    suspend fun getTodoItems() = dashboardRepository.getItemsFromDb()
 
     fun checkAndAddItem(){
         if(!checkIsValidTitle(_newItem.value?.title)){
@@ -130,7 +136,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             delay(1000)
 
             _newItem.value?.dateCreated = getCurrentDateAndTime()
-            val addItem = addNewTodoListItem(newItem.value!!)
+            val addItem = dashboardRepository.addItemToDb(newItem.value!!)
 
             uiScope.launch {
 
@@ -142,13 +148,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     _errorMessage.value = app.getString(R.string.item_add_error)
                 }
 
-                _showContent.value = true
+                _isViewMode.value = true
             }
         }
-    }
-
-    suspend fun addNewTodoListItem(todoItem:TodoItem): DbOperation {
-        return dashboardRepository.addItemToDb(todoItem)
     }
 
     fun checkAndDeleteItems(){
@@ -162,7 +164,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
 
         ioScope.launch {
-            var deleteItems = deleteSelectedItemss(itemsDeleteList)
+            var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
 
             uiScope.launch {
 
@@ -174,13 +176,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     _errorMessage.value = app.getString(R.string.item_delete_error)
                 }
 
-                _showContent.value = true
+                _isViewMode.value = true
             }
         }
-    }
-
-    suspend fun deleteSelectedItemss(todoItems: List<TodoItem?>): DbOperation {
-        return dashboardRepository.deleteItemsFromDb(todoItems)
     }
 
     fun setPriorityOnSelectedItems(){
@@ -195,14 +193,13 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             uiScope.launch {
                 if(priorityItems.success){
                     _checkList.value?.clear()
-                    // update list view
-                    displayTodoItems()
+                    getItemsAndSetProgress()
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.priority_error_message)
                 }
 
-                _showContent.value = true
+                _isViewMode.value = true
             }
         }
     }
