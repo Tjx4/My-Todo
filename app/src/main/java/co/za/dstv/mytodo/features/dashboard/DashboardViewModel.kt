@@ -25,15 +25,15 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     val isNoItems: MutableLiveData<Boolean>
         get() = _isNoItems
 
-    var busyMessage: String = "Please wait..."
+    var busyMessage: String = app.getString(R.string.please_wait)
 
     private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
     val isItemAdded: MutableLiveData<Boolean>
         get() = _isItemAdded
 
-    private val _isItemsDeleted: MutableLiveData<Boolean> = MutableLiveData()
-    val isItemsDeleted: MutableLiveData<Boolean>
-        get() = _isItemsDeleted
+    private val _itemsDeleted: MutableLiveData<List<TodoItem>> = MutableLiveData()
+    val itemsDeleted: MutableLiveData<List<TodoItem>>
+        get() = _itemsDeleted
 
     lateinit var itemDeleteMessage: String
 
@@ -115,19 +115,18 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
     }
 
-
     fun checkAndAddItem(){
         if(!checkIsValidTitle(_newItem.value?.title)){
-            _errorMessage.value = "Please enter a valid title"
+            _errorMessage.value = app.getString(R.string.title_error)
             return
         }
 
         if(!checkIsValidDescription(_newItem.value?.description)){
-            _errorMessage.value = "Please enter a minimum of 10 characters for your description"
+            _errorMessage.value = app.getString(R.string.description_error)
             return
         }
 
-        busyMessage = "Adding item please wait..."
+        busyMessage = app.getString(R.string.adding_items)
         _showLoading.value = true
 
         ioScope.launch {
@@ -155,7 +154,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             return
         }
 
-        val itemsDeleteList = arrayListOf<TodoItem?>()
+        val itemsDeleteList = ArrayList<TodoItem?>()
         _checkList.value?.forEach {
             itemsDeleteList.add(todoItems.value?.get(it))
         }
@@ -168,7 +167,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                 if(deleteItems.success){
                     val deletedItems = _checkList.value?.count()
                     itemDeleteMessage = if(deletedItems == 1) app.getString(R.string.item_deleted) else "$deletedItems items deleted"
-                    _isItemsDeleted.value = true
+                    _itemsDeleted.value = itemsDeleteList as List<TodoItem>
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.item_delete_error)

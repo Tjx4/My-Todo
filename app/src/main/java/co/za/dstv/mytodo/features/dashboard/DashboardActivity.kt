@@ -65,7 +65,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
-        dashboardViewModel.isItemsDeleted.observe(this, Observer { onItemDeleted(it) })
+        dashboardViewModel.itemsDeleted.observe(this, Observer { onItemsDeleted(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
@@ -137,16 +137,13 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         }
     }
 
-    private fun onItemDeleted(itemAdded: Boolean) {
-        dashboardViewModel.checkList.value?.forEach { position ->
-            rvItems.removeViewAt(position)
-            todoItemAdapter?.notifyItemRemoved(position)
-
-            dashboardViewModel.checkList.value?.count()?.let {size ->
-                todoItemAdapter?.notifyItemRangeChanged(position,  size)
-            }
+    private fun onItemsDeleted(todoItems: List<TodoItem>) {
+        todoItems.forEach { item ->
+            val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
+            currentItems.remove(item)
         }
 
+        todoItemAdapter?.notifyDataSetChanged()
         dashboardViewModel.checkList.value?.clear()
         Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
     }
@@ -198,7 +195,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             else{
                 todoItemAdapter?.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
-                dashboardViewModel.checkList.value = dashboardViewModel.checkList.value // Todo: fix
+                dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
             }
         }
         return true
