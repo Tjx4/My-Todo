@@ -77,7 +77,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
                     dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
                 if (isEmptyCheckList) {
-                    holder.itemView.blinkView(0.5f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
+                    holder.itemView.blinkView(0.6f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
                         val item =  todoItems[position]
                         var payload = Bundle()
                         payload.putParcelable(TODO_ITEM_KEY, item)
