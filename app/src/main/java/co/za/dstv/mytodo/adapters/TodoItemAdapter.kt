@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
+import co.za.dstv.mytodo.extensions.blinkView
 import co.za.dstv.mytodo.extensions.navigateToActivity
 import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.features.item.ItemViewActivity
@@ -75,12 +77,13 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
                 if (isEmptyCheckList) {
-                    notifyItemChanged(position)
+                    holder.itemView.blinkView(0.6f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
+                        val item =  todoItems[position]
+                        var payload = Bundle()
+                        payload.putParcelable(TODO_ITEM_KEY, item)
+                        dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
+                    })
 
-                    val item =  todoItems[position]
-                    var payload = Bundle()
-                    payload.putParcelable(TODO_ITEM_KEY, item)
-                    dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
                 } else {
                     dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
                     setItemSelected(holder)
