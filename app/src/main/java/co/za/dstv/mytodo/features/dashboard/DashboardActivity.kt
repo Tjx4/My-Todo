@@ -56,7 +56,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     override fun onResume() {
         super.onResume()
-        dashboardViewModel.getItemsAndSetProgress()
+        dashboardViewModel.getItemsAndSetProgress()  // Todo: change to notify property
     }
 
     private fun addObservers() {
@@ -65,7 +65,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
-        dashboardViewModel.itemsDeleted.observe(this, Observer { onItemDeleted(it) })
+        dashboardViewModel.isItemsDeleted.observe(this, Observer { onItemDeleted(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
@@ -88,10 +88,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun setSelectionMode(isSelectionMode: Boolean) {
-        val itemCount = dashboardViewModel.checkList.value?.size
-        supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
         supportActionBar?.setDisplayShowHomeEnabled(false)
-
         deleteMenuItem?.isVisible = true
         priorityMenuItem?.isVisible = true
         exitMenuItem?.isVisible = false
@@ -111,7 +108,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onCheckListUpdated(items: MutableList<Int>) {
-        dashboardViewModel.checkItems(items.size)
+        val itemCount = items.size
+        supportActionBar?.title = if (itemCount == 1) "$itemCount item" else "$itemCount items"
+        dashboardViewModel.toggleViewSelectMode(items.size)
     }
 
     private fun onTodoItemsSet(todoItems: List<TodoItem>) {
@@ -130,14 +129,26 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     private fun onItemAdded(showContent: Boolean) {
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
-            addItemFragment.dismiss()
+            todoItemAdapter?.deselectAllItem()
+            dashboardViewModel.checkList.value?.clear()
+            dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
             dashboardViewModel.getItemsAndSetProgress()
+            addItemFragment.dismiss()
         }
     }
 
-    private fun onItemDeleted(deletedItems: Int) {
-        Toast.makeText(this, if(deletedItems == 1) getString(R.string.item_deleted) else "$deletedItems items deleted", Toast.LENGTH_LONG).show()
-        dashboardViewModel.getItemsAndSetProgress()
+    private fun onItemDeleted(itemAdded: Boolean) {
+        dashboardViewModel.checkList.value?.forEach { position ->
+            rvItems.removeViewAt(position)
+            todoItemAdapter?.notifyItemRemoved(position)
+
+            dashboardViewModel.checkList.value?.count()?.let {size ->
+                todoItemAdapter?.notifyItemRangeChanged(position,  size)
+            }
+        }
+
+        dashboardViewModel.checkList.value?.clear()
+        Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun onError(errorMessage: String) {
@@ -149,10 +160,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun onAddButtonClicked(view: View){
-        todoItemAdapter?.deselectAllItem()
-        dashboardViewModel.checkList.value?.clear()
-        dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
-
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)

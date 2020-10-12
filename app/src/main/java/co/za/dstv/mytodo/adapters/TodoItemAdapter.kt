@@ -85,7 +85,8 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                     })
 
                 } else {
-                    dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
+                    dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                    dashboardActivity.dashboardViewModel.checkList.value = dashboardActivity.dashboardViewModel.checkList.value
                     setItemSelected(holder)
                 }
             }
@@ -103,7 +104,8 @@ class TodoItemAdapter(context: Context, private val todoItems: List<TodoItem>) :
                 }
             }
             else{
-                dashboardActivity.dashboardViewModel.addNewTodoListItem(position)
+                dashboardActivity.dashboardViewModel.checkList.value?.add(position)
+                dashboardActivity.dashboardViewModel.checkList.value = dashboardActivity.dashboardViewModel.checkList.value
                 setItemSelected(holder)
             }
 

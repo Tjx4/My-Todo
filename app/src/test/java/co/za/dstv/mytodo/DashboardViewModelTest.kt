@@ -41,7 +41,7 @@ class DashboardViewModelTest {
     fun `test check items`() = runBlocking  {
         val itemCount = 0
 
-        dashboardViewModel.checkItems(itemCount)
+        dashboardViewModel.toggleViewSelectMode(itemCount)
 
         assert(dashboardViewModel.isViewMode.value == true)
     }
@@ -50,7 +50,7 @@ class DashboardViewModelTest {
     fun `test get progress`() = runBlocking  {
         val itemCount = 0
 
-        dashboardViewModel.checkItems(itemCount)
+        dashboardViewModel.toggleViewSelectMode(itemCount)
 
         assert(dashboardViewModel.isViewMode.value == true)
     }
