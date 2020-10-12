@@ -153,6 +153,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         priorityItems.forEach { item ->
             val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
             item.priority = !item.priority
+            item.isSelected = false
         }
 
         todoItemAdapter?.deselectAllItem()

@@ -130,25 +130,20 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     private fun deselectItem(holder: ViewHolder, position: Int) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item)
-
         holder.checkedImg.visibility = View.GONE
-        holder?.itemView.isSelected = false
         todoItems[position].isSelected = false
     }
 
     private fun setItemSelected(holder: ViewHolder, position: Int) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_selected)
-
         holder.checkedImg.visibility = View.VISIBLE
-        holder?.itemView.isSelected = true
-        todoItems[holder.position].isSelected = true
+        todoItems[position].isSelected = true
     }
 
     private fun setItemPriority(holder: ViewHolder) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_priority)
-
         holder.checkedImg.visibility = View.GONE
     }
 
