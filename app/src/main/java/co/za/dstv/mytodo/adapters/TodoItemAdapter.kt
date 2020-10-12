@@ -42,14 +42,14 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         holder.dueDateTv.text = "Due on $dueDate"
 
         if(todoItem.isSelected) {
-            setItemSelected(holder)
+            setItemSelected(holder, position)
         }
         else{
             if(todoItem.priority){
                 setItemPriority(holder)
             }
             else{
-                deselectItem(holder)
+                deselectItem(holder, position)
             }
         }
 
@@ -66,7 +66,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
 
             if(todoItem.isSelected) {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(holder)
+                deselectItem(holder, position)
 
                 if(todoItem.priority){
                     setItemPriority(holder)
@@ -87,7 +87,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
                 } else {
                     dashboardActivity.dashboardViewModel.checkList.value?.add(position)
                     dashboardActivity.dashboardViewModel.checkList.value = dashboardActivity.dashboardViewModel.checkList.value
-                    setItemSelected(holder)
+                    setItemSelected(holder, position)
                 }
             }
         }
@@ -97,7 +97,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
 
             if(todoItem.isSelected){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
-                deselectItem(holder)
+                deselectItem(holder, position)
 
                 if(todoItem.priority){
                     setItemPriority(holder)
@@ -106,7 +106,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
             else{
                 dashboardActivity.dashboardViewModel.checkList.value?.add(position)
                 dashboardActivity.dashboardViewModel.checkList.value = dashboardActivity.dashboardViewModel.checkList.value
-                setItemSelected(holder)
+                setItemSelected(holder, position)
             }
 
             true
@@ -116,9 +116,8 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     fun deselectAllItem(){
         var indx = 0
         allItems.forEach() {
-            deselectItem(it)
-
             val pos= if(it.position < 0)  0 else it.position
+            deselectItem(it, pos)
 
             if(todoItems[pos]?.priority){
                 setItemPriority(it)
@@ -128,16 +127,16 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         }
     }
 
-    private fun deselectItem(holder: ViewHolder) {
+    private fun deselectItem(holder: ViewHolder, position: Int) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item)
 
         holder.checkedImg.visibility = View.GONE
         holder?.itemView.isSelected = false
-        todoItems[holder.position].isSelected = false
+        todoItems[position].isSelected = false
     }
 
-    private fun setItemSelected(holder: ViewHolder) {
+    private fun setItemSelected(holder: ViewHolder, position: Int) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_selected)
 

@@ -66,6 +66,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
         dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
         dashboardViewModel.itemsDeleted.observe(this, Observer { onItemsDeleted(it) })
+        dashboardViewModel.priorityItems.observe(this, Observer { onPriorityItemsSet(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
@@ -137,8 +138,8 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         }
     }
 
-    private fun onItemsDeleted(todoItems: List<TodoItem>) {
-        todoItems.forEach { item ->
+    private fun onItemsDeleted(deletedItems: List<TodoItem>) {
+        deletedItems.forEach { item ->
             val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
             currentItems.remove(item)
         }
@@ -146,6 +147,16 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         todoItemAdapter?.notifyDataSetChanged()
         dashboardViewModel.checkList.value?.clear()
         Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
+    }
+
+    private fun onPriorityItemsSet(priorityItems: List<TodoItem>) {
+        priorityItems.forEach { item ->
+            val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
+            item.priority = true
+        }
+
+        todoItemAdapter?.notifyDataSetChanged()
+        dashboardViewModel.checkList.value?.clear()
     }
 
     private fun onError(errorMessage: String) {

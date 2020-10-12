@@ -35,6 +35,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     val itemsDeleted: MutableLiveData<List<TodoItem>>
         get() = _itemsDeleted
 
+    private val _priorityItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
+    val priorityItems: MutableLiveData<List<TodoItem>>
+        get() = _priorityItems
+
     lateinit var itemDeleteMessage: String
 
     private val _todoProgress: MutableLiveData<Int> = MutableLiveData()
@@ -189,8 +193,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
             uiScope.launch {
                 if(priorityItems.success){
-                    _checkList.value?.clear()
-                    getItemsAndSetProgress()
+                    _priorityItems.value = itemsPriorityList as List<TodoItem>
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.priority_error_message)
