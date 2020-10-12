@@ -23,4 +23,5 @@
     <string name="description_error">Please enter a minimum of 10 characters for your description</string>
     <string name="title_error">Please enter a valid title</string>
     <string name="please_wait">Please wait...</string>
+    <string name="toggle_priority">Toggle priority</string>
 </resources>
