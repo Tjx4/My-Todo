@@ -12,7 +12,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:id="@+id/clCParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.item.ItemViewActivity">
+    tools:context=".features.item.ItemViewActivity"
+    android:animateLayoutChanges="true">
 
     <TextView
         android:id="@+id/tvDescription"

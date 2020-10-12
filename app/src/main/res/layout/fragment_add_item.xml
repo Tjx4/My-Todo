@@ -77,7 +77,6 @@
                 style="@style/AddItemButtons"
                 android:id="@+id/btnAddTodoItem"
                 android:text="@string/save_item"
-                android:textColor="@color/greyText"
                 app:layout_constraintRight_toLeftOf="@+id/vSeparator"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
@@ -86,7 +85,7 @@
                 android:id="@+id/vSeparator"
                 android:layout_width="2dp"
                 android:layout_height="0dp"
-                android:background="@color/midGrey"
+                android:background="@color/lightGrey"
                 android:layout_marginVertical="@dimen/small_margin"
                 android:layout_marginHorizontal="0dp"
                 app:layout_constraintRight_toLeftOf="@+id/btnCloseSaveLocationList"
@@ -97,7 +96,6 @@
                 style="@style/AddItemButtons"
                 android:id="@+id/btnCloseSaveLocationList"
                 android:text="Cancel"
-                android:textColor="@color/greyText"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
