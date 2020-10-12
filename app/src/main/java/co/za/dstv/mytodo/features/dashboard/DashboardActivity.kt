@@ -152,9 +152,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onPriorityItemsSet(priorityItems: List<TodoItem>) {
         priorityItems.forEach { item ->
             val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
-            item.priority = true
+            item.priority = !item.priority
         }
 
+        todoItemAdapter?.deselectAllItem()
         todoItemAdapter?.notifyDataSetChanged()
         dashboardViewModel.checkList.value?.clear()
     }
