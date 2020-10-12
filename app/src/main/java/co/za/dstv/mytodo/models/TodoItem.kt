@@ -12,5 +12,6 @@ data class TodoItem (
       var complete: Boolean = false,
       var priority: Boolean = false,
       var dateCreated: String? = null,
-      var dueDate: String? = null
+      var dueDate: String? = null,
+      var isSelected: Boolean = false,
 ): Parcelable

@@ -41,7 +41,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         val dueDate = todoItem.dueDate
         holder.dueDateTv.text = "Due on $dueDate"
 
-        if(holder.checkedImg.visibility == View.VISIBLE) {
+        if(todoItem.isSelected) {
             setItemSelected(holder)
         }
         else{
@@ -64,7 +64,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         holder.itemView.setOnClickListener() {
             selectedPos = holder.layoutPosition
 
-            if(holder.checkedImg.visibility == View.VISIBLE) {
+            if(todoItem.isSelected) {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
 
@@ -95,7 +95,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         holder.itemView.setOnLongClickListener {
             selectedPos = holder.layoutPosition
 
-            if(holder.checkedImg.visibility == View.VISIBLE){
+            if(todoItem.isSelected){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
                 deselectItem(holder)
 
@@ -133,6 +133,8 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item)
 
         holder.checkedImg.visibility = View.GONE
+        holder?.itemView.isSelected = false
+        todoItems[holder.position].isSelected = false
     }
 
     private fun setItemSelected(holder: ViewHolder) {
@@ -140,6 +142,8 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_selected)
 
         holder.checkedImg.visibility = View.VISIBLE
+        holder?.itemView.isSelected = true
+        todoItems[holder.position].isSelected = true
     }
 
     private fun setItemPriority(holder: ViewHolder) {
