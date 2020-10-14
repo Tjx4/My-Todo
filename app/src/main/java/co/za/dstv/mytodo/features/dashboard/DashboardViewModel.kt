@@ -188,9 +188,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     fun setPriorityOnSelectedItems(){
         val itemsPriorityList = arrayListOf<TodoItem?>()
         _checkList.value?.forEach {
-            _todoItems.value?.get(it)?.let { it.priority = !it.priority }
-            val item = _todoItems.value?.get(it)
-            itemsPriorityList.add(item)
+            itemsPriorityList.add(_todoItems.value?.get(it))
         }
 
         ioScope.launch {
@@ -199,6 +197,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             uiScope.launch {
 
                 if(priorityItems.success){
+                    itemsPriorityList?.forEach {
+                        it?.priority = !it?.priority!!
+                     }
+
                     _priorityItems.value = itemsPriorityList as List<TodoItem>
                 }
                 else{
