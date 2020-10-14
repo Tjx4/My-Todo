@@ -56,8 +56,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     override fun onResume() {
         super.onResume()
-        // dashboardViewModel.setTodoItems()
-        todoItemAdapter?.notifyDataSetChanged()
+        if(todoItemAdapter != null){
+            dashboardViewModel.setTodoItems()
+        }
     }
 
     private fun addObservers() {
@@ -131,7 +132,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     }
 
-    //now
+
     private fun onItemAdded(todoItems: TodoItem) {
         setViewMode(true)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
@@ -155,7 +156,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onPriorityItemsSet(priorityItems: List<TodoItem>) {
         priorityItems.forEach { item ->
             val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
-            item.priority = !item.priority
+            //item.priority = !item.priority
             item.isSelected = false
         }
 

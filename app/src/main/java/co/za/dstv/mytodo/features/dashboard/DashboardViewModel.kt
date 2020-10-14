@@ -69,6 +69,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _todoProgress.value = 0
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
+        setTodoItems()
     }
 
     fun toggleViewSelectMode(selectedItems: Int){
@@ -182,13 +183,24 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     fun setPriorityOnSelectedItems(){
         val itemsPriorityList = arrayListOf<TodoItem?>()
         _checkList.value?.forEach {
-            itemsPriorityList.add(todoItems.value?.get(it))
+            _todoItems.value?.get(it)?.let { it.priority = !it.priority }
+            val item = _todoItems.value?.get(it)
+            itemsPriorityList.add(item)
         }
 
         ioScope.launch {
             var priorityItems = dashboardRepository.toggleItemPrioriy(itemsPriorityList)
 
             uiScope.launch {
+/*
+    itemsPriorityList.forEach { todItem ->
+       val indx = _todoItems.value?.indexOf(todItem)
+        if(indx != null){
+            val currentItem  = _todoItems.value?.get(indx)
+            currentItem?.priority = !currentItem?.priority
+        }
+    }
+*/
                 if(priorityItems.success){
                     _priorityItems.value = itemsPriorityList as List<TodoItem>
                 }
