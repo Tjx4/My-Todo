@@ -138,6 +138,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             rvItems.scrollToPosition(0)
             todoItemAdapter?.notifyItemInserted(0)
+            dashboardViewModel.updateProgress()
             addItemFragment.dismiss()
         }
     }

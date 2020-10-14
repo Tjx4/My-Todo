@@ -111,9 +111,13 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     _todoItems.value = todoItems
                 }
 
-                _todoProgress.value = getProgress(todoItems)
+                updateProgress()
             }
         }
+    }
+
+    fun updateProgress(){
+        _todoProgress.value = _todoItems?.value?.let { getProgress(it) }
     }
 
     fun checkAndAddItem(){
