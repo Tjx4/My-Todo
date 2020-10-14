@@ -54,10 +54,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         supportActionBar?.setIcon(R.drawable.ic_burger_menu)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onRestart() {
+        super.onRestart()
         if(todoItemAdapter != null){
             dashboardViewModel.setTodoItems()
+            rvItems.scrollToPosition(todoItemAdapter!!.selectedPos)
         }
     }
 
@@ -131,7 +132,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onServiceCategoryClick(view: View, position: Int) {
 
     }
-
 
     private fun onItemAdded(todoItems: TodoItem) {
         setViewMode(true)

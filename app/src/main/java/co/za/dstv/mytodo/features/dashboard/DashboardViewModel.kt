@@ -57,6 +57,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
         get() = _todoItems
 
+    private val _updateItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
+    val updateItems: MutableLiveData<List<TodoItem>>
+        get() = _updateItems
+
     private var _checkList: MutableLiveData<MutableList<Int>> = MutableLiveData()
     val checkList: MutableLiveData<MutableList<Int>>
         get() = _checkList
@@ -77,10 +81,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
            0 -> _isViewMode.value = true
            1 -> _isSelectionMode.value = true
         }
-    }
-
-    fun setSelectionMode(){
-        _isSelectionMode.value = true
     }
 
     fun removeItemFroCheckList(itemIndex: Int){

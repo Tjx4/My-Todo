@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
+import co.za.dstv.mytodo.constants.INDEX
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
 import co.za.dstv.mytodo.extensions.blinkView
@@ -23,7 +24,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
-    private var selectedPos = RecyclerView.NO_POSITION
+    var selectedPos = 0
     var allItems = ArrayList<ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -62,7 +63,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         position: Int
     ) {
         holder.itemView.setOnClickListener() {
-            selectedPos = holder.layoutPosition
+            selectedPos = position
 
             if(todoItem.isSelected) {
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
@@ -93,7 +94,7 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         }
 
         holder.itemView.setOnLongClickListener {
-            selectedPos = holder.layoutPosition
+            selectedPos = position
 
             if(todoItem.isSelected){
                 dashboardActivity.dashboardViewModel.removeItemFroCheckList(position)
