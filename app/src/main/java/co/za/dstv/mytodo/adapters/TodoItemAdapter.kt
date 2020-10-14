@@ -117,11 +117,13 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     fun deselectAllItem(){
         var indx = 0
         allItems.forEach() {
-            val pos= if(it.position < 0)  0 else it.position
-            deselectItem(it, pos)
+            var pos= if(it.position < 0)  0 else it.position
 
-            if(todoItems[pos]?.priority){
-                setItemPriority(it)
+            if(pos < todoItems.size) {
+                deselectItem(it, pos)
+                if(todoItems[pos]?.priority){
+                    setItemPriority(it)
+                }
             }
 
             indx++
