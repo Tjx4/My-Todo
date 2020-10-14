@@ -69,7 +69,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _todoProgress.value = 0
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
-        setTodoItems()
     }
 
     fun toggleViewSelectMode(selectedItems: Int){

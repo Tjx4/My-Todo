@@ -56,6 +56,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     override fun onResume() {
         super.onResume()
+        // dashboardViewModel.setTodoItems()
         todoItemAdapter?.notifyDataSetChanged()
     }
 
