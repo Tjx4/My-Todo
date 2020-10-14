@@ -156,7 +156,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     private fun onPriorityItemsSet(priorityItems: List<TodoItem>) {
         priorityItems.forEach { item ->
             val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
-            //item.priority = !item.priority
             item.isSelected = false
         }
 
