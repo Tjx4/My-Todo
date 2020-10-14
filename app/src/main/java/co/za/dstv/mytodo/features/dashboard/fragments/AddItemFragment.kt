@@ -65,7 +65,7 @@ class AddItemFragment : BaseDialogFragment() {
 
     private fun setDueDateAndTime() {
         val selectedDateTime = getFormatedDateAndTime(dueDateDp.dayOfMonth, dueDateDp.month + 1, dueDateDp.year, dueTimeTp.hour, dueTimeTp.minute)
-        dashboardActivity?.dashboardViewModel?.setDueDate(selectedDateTime)
+        dashboardActivity?.dashboardViewModel?.newItem?.value?.dueDate = selectedDateTime
     }
 
     override fun onAttach(context: Context) {
@@ -82,7 +82,6 @@ class AddItemFragment : BaseDialogFragment() {
         fun newInstance(): AddItemFragment {
             val addItemFragment = AddItemFragment()
             var payload = Bundle()
-            //payload.putString(TITLE, title)
             addItemFragment.arguments = payload
             return addItemFragment
         }

@@ -56,7 +56,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     override fun onResume() {
         super.onResume()
-        dashboardViewModel.getItemsAndSetProgress()  // Todo: change to notify property
+        todoItemAdapter?.notifyDataSetChanged()
     }
 
     private fun addObservers() {
@@ -64,7 +64,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.isViewMode.observe(this, Observer { setViewMode(it) })
         dashboardViewModel.isSelectionMode.observe(this, Observer { setSelectionMode(it) })
         dashboardViewModel.errorMessage.observe(this, Observer { onError(it) })
-        dashboardViewModel.isItemAdded.observe(this, Observer { onItemAdded(it) })
+        dashboardViewModel.currentItem.observe(this, Observer { onItemAdded(it) })
         dashboardViewModel.itemsDeleted.observe(this, Observer { onItemsDeleted(it) })
         dashboardViewModel.priorityItems.observe(this, Observer { onPriorityItemsSet(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
@@ -95,17 +95,19 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         exitMenuItem?.isVisible = false
     }
 
-    private fun setViewMode(showContent: Boolean) {
+    private fun setViewMode(isViewMode: Boolean) {
         hideCurrentLoadingDialog(this)
         clCParent.visibility = View.VISIBLE
+        deleteMenuItem?.isVisible = false
+        priorityMenuItem?.isVisible = false
+        exitMenuItem?.isVisible = true
+
+        dashboardViewModel.checkList.value?.clear()
+        todoItemAdapter?.deselectAllItem()
 
         supportActionBar?.title = getString(R.string.todo_list)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setIcon(R.drawable.ic_burger_menu)
-
-        deleteMenuItem?.isVisible = false
-        priorityMenuItem?.isVisible = false
-        exitMenuItem?.isVisible = true
     }
 
     private fun onCheckListUpdated(items: MutableList<Int>) {
@@ -128,12 +130,12 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     }
 
-    private fun onItemAdded(showContent: Boolean) {
+    //now
+    private fun onItemAdded(todoItems: TodoItem) {
+        setViewMode(true)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
-            todoItemAdapter?.deselectAllItem()
-            dashboardViewModel.checkList.value?.clear()
-            dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
-            dashboardViewModel.getItemsAndSetProgress()
+            rvItems.scrollToPosition(0)
+            todoItemAdapter?.notifyItemInserted(0)
             addItemFragment.dismiss()
         }
     }

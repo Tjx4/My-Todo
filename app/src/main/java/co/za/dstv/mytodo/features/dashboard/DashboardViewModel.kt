@@ -27,10 +27,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
     var busyMessage: String = app.getString(R.string.please_wait)
 
-    private val _isItemAdded: MutableLiveData<Boolean> = MutableLiveData()
-    val isItemAdded: MutableLiveData<Boolean>
-        get() = _isItemAdded
-
     private val _itemsDeleted: MutableLiveData<List<TodoItem>> = MutableLiveData()
     val itemsDeleted: MutableLiveData<List<TodoItem>>
         get() = _itemsDeleted
@@ -53,6 +49,10 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     val newItem: MutableLiveData<TodoItem>
         get() = _newItem
 
+    private val _currentItem: MutableLiveData<TodoItem> = MutableLiveData()
+    val currentItem: MutableLiveData<TodoItem>
+        get() = _currentItem
+
     private var _todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
     var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
         get() = _todoItems
@@ -69,6 +69,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _todoProgress.value = 0
         _newItem.value = TodoItem()
         _checkList.value = ArrayList()
+        setTodoItems()
     }
 
     fun toggleViewSelectMode(selectedItems: Int){
@@ -87,10 +88,6 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         _checkList.value = _checkList.value
     }
 
-    fun setDueDate(selectedDateTime: String){
-        _newItem.value?.dueDate = selectedDateTime
-    }
-
     fun getProgress(todoItems: List<TodoItem>): Int{
         var completed = 0
         todoItems.forEach {
@@ -102,7 +99,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         return  if(todoItems.isNotEmpty()) completed * 100 / todoItems.size else 0
     }
 
-    fun getItemsAndSetProgress(){
+    fun setTodoItems(){
         ioScope.launch {
             val todoItems = dashboardRepository.getItemsFromDb()
 
@@ -136,14 +133,15 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         ioScope.launch {
             delay(1000)
 
-            _newItem.value?.dateCreated = getCurrentDateAndTime()
+            val newItem = _newItem.value!!
+            newItem?.dateCreated = getCurrentDateAndTime()
 
-            val addItem = dashboardRepository.addItemToDb(newItem.value!!)
+            val addItem = dashboardRepository.addItemToDb(newItem)
 
             uiScope.launch {
-
                 if(addItem.success){
-                    _isItemAdded.value = true
+                    ((_todoItems.value as ArrayList)).add(0, newItem)
+                    _currentItem.value = newItem
                     _newItem.value = TodoItem()
                 }
                 else{
