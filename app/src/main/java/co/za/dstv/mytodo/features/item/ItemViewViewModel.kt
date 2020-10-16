@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.models.TodoItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ItemViewViewModel(application: Application, private val itemViewRepository: ItemViewRepository) : BaseVieModel(application) {
@@ -54,6 +55,8 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
 
         ioScope.launch {
             var completeItems = itemViewRepository.setItemAsComplete(itemsCompleList)
+
+            delay(1000)
 
             uiScope.launch {
                 if(completeItems.success){
