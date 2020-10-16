@@ -82,6 +82,7 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <View
+                android:visibility="gone"
                 android:id="@+id/vSeparator"
                 android:layout_width="2dp"
                 android:layout_height="0dp"

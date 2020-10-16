@@ -5,9 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.features.base.viewModels.BaseVieModel
 import co.za.dstv.mytodo.models.TodoItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ItemViewViewModel(application: Application, private val itemViewRepository: ItemViewRepository) : BaseVieModel(application) {
+
+    private var _showLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val showLoading: MutableLiveData<Boolean>
+        get() = _showLoading
+
+    var busyMessage: String = app.getString(R.string.please_wait)
 
     private var _isComplete: MutableLiveData<Boolean> = MutableLiveData()
     val isComplete: MutableLiveData<Boolean>
@@ -41,18 +48,25 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
     }
 
     fun setItemsComplete(){
+        busyMessage = app.getString(R.string.updating_item)
+        _showLoading.value = true
+
         val itemsCompleList = arrayListOf<TodoItem?>(_todoItem.value)
 
         ioScope.launch {
             var completeItems = itemViewRepository.setItemAsComplete(itemsCompleList)
 
+            delay(1000)
+
             uiScope.launch {
                 if(completeItems.success){
                     _updated.value = true
+                    _isComplete.value = true
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.priority_error_message)
                 }
+
             }
         }
 

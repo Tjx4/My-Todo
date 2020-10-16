@@ -15,6 +15,7 @@ import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.extensions.blinkView
+import co.za.dstv.mytodo.extensions.runWhenReady
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
 import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
@@ -57,8 +58,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onRestart() {
         super.onRestart()
         if(todoItemAdapter != null){
+            val position = todoItemAdapter!!.selectedPos
             dashboardViewModel.setTodoItems()
-            rvItems.scrollToPosition(todoItemAdapter!!.selectedPos)
+            rvItems.runWhenReady {
+                rvItems.scrollToPosition(position)
+            }
         }
     }
 
@@ -97,13 +101,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         exitMenuItem?.isVisible = false
     }
 
-    fun setViewMode(isViewMode: Boolean) {
+    private fun setViewMode(isViewMode: Boolean) {
+        hideCurrentLoadingDialog(this)
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true
-
-        dashboardViewModel.checkList.value?.clear()
-        todoItemAdapter?.deselectAllItem()
 
         supportActionBar?.title = getString(R.string.todo_list)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -121,7 +123,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         todoItemAdapter = TodoItemAdapter(this, todoItems)
         rvItems.adapter = todoItemAdapter
 
-
         rvItems.visibility = View.VISIBLE
         llLoading.visibility = View.GONE
         tvNoItems.visibility = View.GONE
@@ -135,7 +136,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         hideCurrentLoadingDialog(this)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             rvItems.scrollToPosition(0)
-            todoItemAdapter?.notifyItemInserted(0)
+            todoItemAdapter?.notifyDataSetChanged()
             dashboardViewModel.updateProgress()
             addItemFragment.dismiss()
         }
@@ -157,7 +158,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             item.isSelected = false
         }
 
-        todoItemAdapter?.deselectAllItem()
         todoItemAdapter?.notifyDataSetChanged()
     }
 
@@ -170,6 +170,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun onAddButtonClicked(view: View){
+        todoItemAdapter?.deselectAllItem()
         setViewMode(true)
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
@@ -187,12 +188,14 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
+                todoItemAdapter?.deselectAllItem()
                 setViewMode(true)
                 dashboardViewModel.checkAndDeleteItems()
             }
             R.id.action_priority -> {
+                todoItemAdapter?.deselectAllItem()
                 setViewMode(true)
-                dashboardViewModel.checkAndSetPriorityOnItems()
+                dashboardViewModel.setPriorityOnSelectedItems()
             }
             R.id.action_exit -> {
                 finish()
@@ -212,6 +215,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
                 todoItemAdapter?.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
                 dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
+                todoItemAdapter?.notifyDataSetChanged()
             }
         }
         return true

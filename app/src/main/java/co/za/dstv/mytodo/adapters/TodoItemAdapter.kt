@@ -2,9 +2,11 @@ package co.za.dstv.mytodo.adapters
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -115,18 +117,20 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     }
 
     fun deselectAllItem(){
-        var indx = 0
-        allItems.forEach() {
-            var pos=  if(it.adapterPosition < 0) 0 else it.adapterPosition
-            pos =  if(pos > todoItems.size) todoItems.size else pos
-
-            deselectItem(it, pos)
-            if(todoItems[pos]?.priority){
-                setItemPriority(it)
+        try{
+            var indx = 0
+            allItems.forEach() {
+                    deselectItem(it, it.position)
+                    if(todoItems[it.position]?.priority){
+                        setItemPriority(it)
+                    }
+                indx++
             }
-
-            indx++
         }
+        catch (ex: Exception){
+            Log.e("AD_ERR", "$ex")
+        }
+
     }
 
     private fun deselectItem(holder: ViewHolder, position: Int) {
