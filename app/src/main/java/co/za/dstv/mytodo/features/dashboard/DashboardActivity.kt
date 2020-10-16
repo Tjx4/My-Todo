@@ -103,9 +103,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true
 
-        dashboardViewModel.checkList.value?.clear()
-        todoItemAdapter?.deselectAllItem()
-
         supportActionBar?.title = getString(R.string.todo_list)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setIcon(R.drawable.ic_burger_menu)
@@ -148,7 +145,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         }
 
         todoItemAdapter?.notifyDataSetChanged()
-        dashboardViewModel.checkList.value?.clear()
         Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
     }
 
@@ -158,9 +154,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
             item.isSelected = false
         }
 
-        todoItemAdapter?.deselectAllItem()
         todoItemAdapter?.notifyDataSetChanged()
-        dashboardViewModel.checkList.value?.clear()
     }
 
     private fun onError(errorMessage: String) {
@@ -172,6 +166,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun onAddButtonClicked(view: View){
+        todoItemAdapter?.deselectAllItem()
         setViewMode(true)
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
@@ -189,9 +184,13 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
+                todoItemAdapter?.deselectAllItem()
+                setViewMode(true)
                 dashboardViewModel.checkAndDeleteItems()
             }
             R.id.action_priority -> {
+                todoItemAdapter?.deselectAllItem()
+                setViewMode(true)
                 dashboardViewModel.setPriorityOnSelectedItems()
             }
             R.id.action_exit -> {

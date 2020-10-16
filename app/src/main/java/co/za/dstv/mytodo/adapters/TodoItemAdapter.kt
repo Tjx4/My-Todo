@@ -2,6 +2,7 @@ package co.za.dstv.mytodo.adapters
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,18 +119,15 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         try{
             var indx = 0
             allItems.forEach() {
-                if(it.position < todoItems.size) {
                     deselectItem(it, it.position)
                     if(todoItems[it.position]?.priority){
                         setItemPriority(it)
                     }
-                }
-
                 indx++
             }
         }
         catch (ex: Exception){
-
+            Log.e("AD_ERR", "$ex")
         }
 
     }
