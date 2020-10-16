@@ -15,6 +15,7 @@ import co.za.dstv.mytodo.R
 import co.za.dstv.mytodo.adapters.TodoItemAdapter
 import co.za.dstv.mytodo.databinding.ActivityDashboardBinding
 import co.za.dstv.mytodo.extensions.blinkView
+import co.za.dstv.mytodo.extensions.runWhenReady
 import co.za.dstv.mytodo.features.base.activities.BaseParentActivity
 import co.za.dstv.mytodo.features.dashboard.fragments.AddItemFragment
 import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
@@ -57,8 +58,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onRestart() {
         super.onRestart()
         if(todoItemAdapter != null){
+            val position = todoItemAdapter!!.selectedPos
             dashboardViewModel.setTodoItems()
-            rvItems.scrollToPosition(todoItemAdapter!!.selectedPos)
+            rvItems.runWhenReady {
+                rvItems.scrollToPosition(position)
+            }
         }
     }
 
