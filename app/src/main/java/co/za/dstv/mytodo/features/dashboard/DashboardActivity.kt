@@ -87,7 +87,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onShowLoading(isBusy: Boolean) {
-        clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
     }
 
@@ -100,7 +99,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
     private fun setViewMode(isViewMode: Boolean) {
         hideCurrentLoadingDialog(this)
-        clCParent.visibility = View.VISIBLE
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true
@@ -134,7 +132,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onItemAdded(todoItems: TodoItem) {
-        setViewMode(true)
+        hideCurrentLoadingDialog(this)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             rvItems.scrollToPosition(0)
             todoItemAdapter?.notifyItemInserted(0)
@@ -174,6 +172,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun onAddButtonClicked(view: View){
+        setViewMode(true)
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)

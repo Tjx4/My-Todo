@@ -115,19 +115,23 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     }
 
     fun deselectAllItem(){
-        var indx = 0
-        allItems.forEach() {
-            var pos= if(it.position < 0)  0 else it.position
-
-            if(pos < todoItems.size) {
-                deselectItem(it, pos)
-                if(todoItems[pos]?.priority){
-                    setItemPriority(it)
+        try{
+            var indx = 0
+            allItems.forEach() {
+                if(it.position < todoItems.size) {
+                    deselectItem(it, it.position)
+                    if(todoItems[it.position]?.priority){
+                        setItemPriority(it)
+                    }
                 }
-            }
 
-            indx++
+                indx++
+            }
         }
+        catch (ex: Exception){
+
+        }
+
     }
 
     private fun deselectItem(holder: ViewHolder, position: Int) {
