@@ -24,4 +24,5 @@
     <string name="title_error">Please enter a valid title</string>
     <string name="please_wait">Please wait...</string>
     <string name="toggle_priority">Toggle priority</string>
+    <string name="updating_item">Updating item</string>
 </resources>

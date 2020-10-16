@@ -11,6 +11,8 @@ import co.za.dstv.mytodo.constants.PAYLOAD_KEY
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.databinding.ActivityItemViewBinding
 import co.za.dstv.mytodo.features.base.activities.BaseChildActivity
+import co.za.dstv.mytodo.helpers.hideCurrentLoadingDialog
+import co.za.dstv.mytodo.helpers.showLoadingDialog
 import co.za.dstv.mytodo.models.TodoItem
 import kotlinx.android.synthetic.main.activity_item_view.*
 
@@ -39,9 +41,16 @@ class ItemViewActivity : BaseChildActivity() {
     }
 
     private fun addObservers() {
+        itemViewViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         itemViewViewModel.todoItem.observe(this, Observer { isItemSet(it) })
         itemViewViewModel.isComplete.observe(this, Observer { isItemComplete(it) })
         itemViewViewModel.updated.observe(this, Observer { onUpdated(it) })
+        itemViewViewModel.errorMessage.observe(this, Observer { onUpdatError(it) })
+    }
+
+
+    private fun onShowLoading(isBusy: Boolean) {
+        showLoadingDialog(itemViewViewModel.busyMessage, this)
     }
 
     private fun isItemSet(todoItem: TodoItem?) {
@@ -51,10 +60,15 @@ class ItemViewActivity : BaseChildActivity() {
     private fun isItemComplete(isComplete: Boolean) {
         btnSetComplete.visibility = View.GONE
         llItemComplete.visibility = View.VISIBLE
+        hideCurrentLoadingDialog(this)
     }
 
     fun onSetCompleteButtonClicked(view: View){
         itemViewViewModel.setItemsComplete()
+    }
+
+    fun onUpdatError(error: String){
+        hideCurrentLoadingDialog(this)
     }
 
     fun onUpdated(isUpdated: Boolean){

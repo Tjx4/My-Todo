@@ -132,7 +132,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         hideCurrentLoadingDialog(this)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             rvItems.scrollToPosition(0)
-            todoItemAdapter?.notifyItemInserted(0)
+            todoItemAdapter?.notifyDataSetChanged()
             dashboardViewModel.updateProgress()
             addItemFragment.dismiss()
         }
@@ -211,6 +211,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
                 todoItemAdapter?.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
                 dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
+                todoItemAdapter?.notifyDataSetChanged()
             }
         }
         return true

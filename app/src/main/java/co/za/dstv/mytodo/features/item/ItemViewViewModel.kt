@@ -9,6 +9,12 @@ import kotlinx.coroutines.launch
 
 class ItemViewViewModel(application: Application, private val itemViewRepository: ItemViewRepository) : BaseVieModel(application) {
 
+    private var _showLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val showLoading: MutableLiveData<Boolean>
+        get() = _showLoading
+
+    var busyMessage: String = app.getString(R.string.please_wait)
+
     private var _isComplete: MutableLiveData<Boolean> = MutableLiveData()
     val isComplete: MutableLiveData<Boolean>
     get() = _isComplete
@@ -41,6 +47,9 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
     }
 
     fun setItemsComplete(){
+        busyMessage = app.getString(R.string.updating_item)
+        _showLoading.value = true
+
         val itemsCompleList = arrayListOf<TodoItem?>(_todoItem.value)
 
         ioScope.launch {
@@ -49,10 +58,12 @@ class ItemViewViewModel(application: Application, private val itemViewRepository
             uiScope.launch {
                 if(completeItems.success){
                     _updated.value = true
+                    _isComplete.value = true
                 }
                 else{
                     _errorMessage.value = app.getString(R.string.priority_error_message)
                 }
+
             }
         }
 
