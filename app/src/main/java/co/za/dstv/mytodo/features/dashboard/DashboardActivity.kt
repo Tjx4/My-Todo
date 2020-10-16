@@ -87,7 +87,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onShowLoading(isBusy: Boolean) {
-        clCParent.visibility = View.INVISIBLE
         showLoadingDialog(dashboardViewModel.busyMessage, this)
     }
 
@@ -98,9 +97,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         exitMenuItem?.isVisible = false
     }
 
-    private fun setViewMode(isViewMode: Boolean) {
-        hideCurrentLoadingDialog(this)
-        clCParent.visibility = View.VISIBLE
+    fun setViewMode(isViewMode: Boolean) {
         deleteMenuItem?.isVisible = false
         priorityMenuItem?.isVisible = false
         exitMenuItem?.isVisible = true
@@ -124,6 +121,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         todoItemAdapter = TodoItemAdapter(this, todoItems)
         rvItems.adapter = todoItemAdapter
 
+
         rvItems.visibility = View.VISIBLE
         llLoading.visibility = View.GONE
         tvNoItems.visibility = View.GONE
@@ -134,7 +132,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     private fun onItemAdded(todoItems: TodoItem) {
-        setViewMode(true)
+        hideCurrentLoadingDialog(this)
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
             rvItems.scrollToPosition(0)
             todoItemAdapter?.notifyItemInserted(0)
@@ -150,7 +148,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         }
 
         todoItemAdapter?.notifyDataSetChanged()
-        dashboardViewModel.checkList.value?.clear()
         Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
     }
 
@@ -162,7 +159,6 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         todoItemAdapter?.deselectAllItem()
         todoItemAdapter?.notifyDataSetChanged()
-        dashboardViewModel.checkList.value?.clear()
     }
 
     private fun onError(errorMessage: String) {
@@ -174,6 +170,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     }
 
     fun onAddButtonClicked(view: View){
+        setViewMode(true)
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
@@ -190,10 +187,12 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
+                setViewMode(true)
                 dashboardViewModel.checkAndDeleteItems()
             }
             R.id.action_priority -> {
-                dashboardViewModel.setPriorityOnSelectedItems()
+                setViewMode(true)
+                dashboardViewModel.checkAndSetPriorityOnItems()
             }
             R.id.action_exit -> {
                 finish()

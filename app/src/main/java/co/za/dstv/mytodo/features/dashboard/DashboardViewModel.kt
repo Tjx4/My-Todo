@@ -184,12 +184,16 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     _errorMessage.value = app.getString(R.string.item_delete_error)
                 }
 
-                _isViewMode.value = true
+                _checkList.value?.clear()
             }
         }
     }
 
-    fun setPriorityOnSelectedItems(){
+    fun checkAndSetPriorityOnItems(){
+        if(_checkList.value.isNullOrEmpty()){
+            return
+        }
+
         val itemsPriorityList = arrayListOf<TodoItem?>()
         _checkList.value?.forEach {
             itemsPriorityList.add(_todoItems.value?.get(it))
@@ -211,7 +215,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
                     _errorMessage.value = app.getString(R.string.priority_error_message)
                 }
 
-                _isViewMode.value = true
+                _checkList.value?.clear()
             }
         }
     }
