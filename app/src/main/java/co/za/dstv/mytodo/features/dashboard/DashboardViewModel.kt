@@ -225,11 +225,15 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             uiScope.launch {
                 if(setItemsPriority.success){
                     itemsPriorityList?.forEach { priorityItem ->
-                        _todoItems.value?.forEach {
-                            if(priorityItem?.priority == it.priority){
-                                it.priority = !priorityItem.priority
-                            }
+                        val itemIndex =  _todoItems.value?.indexOfFirst{
+                           it.id == priorityItem?.id
                         }
+
+                        if(itemIndex != null){
+                            val item = _todoItems.value?.get(itemIndex)
+                            item?.priority = priorityItem?.priority ?: false
+                        }
+
                      }
 
                     _priorityItems.value = itemsPriorityList as List<TodoItem>
