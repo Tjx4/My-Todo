@@ -52,7 +52,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         iniViews()
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setIcon(R.drawable.ic_burger_menu)
+        supportActionBar?.setIcon(R.drawable.ic_burger_menu)  // Todo: trigger menu post demo app
     }
 
     override fun onRestart() {
@@ -104,7 +104,7 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
 
         supportActionBar?.title = getString(R.string.todo_list)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setIcon(R.drawable.ic_burger_menu)
+        supportActionBar?.setIcon(R.drawable.ic_burger_menu) // Todo: trigger menu post demo app
     }
 
     private fun onCheckListUpdated(items: MutableList<Int>) {
