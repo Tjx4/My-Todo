@@ -57,9 +57,9 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     var todoItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
         get() = _todoItems
 
-    private val _updateItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
-    val updateItems: MutableLiveData<List<TodoItem>>
-        get() = _updateItems
+    private val _updatedItems: MutableLiveData<List<TodoItem>> = MutableLiveData()
+    val updatedItems: MutableLiveData<List<TodoItem>>
+        get() = _updatedItems
 
     private var _checkList: MutableLiveData<MutableList<Int>> = MutableLiveData()
     val checkList: MutableLiveData<MutableList<Int>>
@@ -116,6 +116,27 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
     }
 
+   fun updateTodoItems(){
+        ioScope.launch {
+            _todoItems.value?.forEach {
+                it.isSelected = false
+            }
+
+            val updatedTodoItems = _todoItems.value
+
+            uiScope.launch {
+                if(updatedTodoItems.isNullOrEmpty()){
+                    _isNoItems.value = true
+                }
+                else{
+                    _updatedItems.value = updatedTodoItems
+                }
+
+                updateProgress()
+            }
+        }
+    }
+
     fun updateProgress(){
         _todoProgress.value = _todoItems?.value?.let { getProgress(it) }
     }
@@ -155,7 +176,7 @@ class DashboardViewModel(application: Application, private val dashboardReposito
         }
     }
 
-    fun checkAndDeleteItems(){
+    fun deleteTodoItems(){
         if(_checkList.value.isNullOrEmpty()){
             return
         }
@@ -166,16 +187,15 @@ class DashboardViewModel(application: Application, private val dashboardReposito
             itemsDeleteList.add(item)
         }
 
-        itemsDeleteList?.forEach {item ->
-            ((_todoItems.value) as ArrayList).remove(item)
-        }
-
         ioScope.launch {
             var deleteItems = dashboardRepository.deleteItemsFromDb(itemsDeleteList)
 
             uiScope.launch {
-
                 if(deleteItems.success){
+                    itemsDeleteList?.forEach {item ->
+                        ((_todoItems.value) as ArrayList).remove(item)
+                    }
+
                     val deletedItems = _checkList.value?.count()
                     itemDeleteMessage = if(deletedItems == 1) app.getString(R.string.item_deleted) else "$deletedItems items deleted"
                     _itemsDeleted.value = itemsDeleteList as List<TodoItem>
@@ -190,19 +210,26 @@ class DashboardViewModel(application: Application, private val dashboardReposito
     }
 
     fun setPriorityOnSelectedItems(){
+        if(_checkList.value.isNullOrEmpty()){
+            return
+        }
+
         val itemsPriorityList = arrayListOf<TodoItem?>()
         _checkList.value?.forEach {
             itemsPriorityList.add(_todoItems.value?.get(it))
         }
 
         ioScope.launch {
-            var priorityItems = dashboardRepository.toggleItemPrioriy(itemsPriorityList)
+            var setItemsPriority = dashboardRepository.toggleItemPrioriy(itemsPriorityList)
 
             uiScope.launch {
-
-                if(priorityItems.success){
-                    itemsPriorityList?.forEach {
-                        it?.priority = !it?.priority!!
+                if(setItemsPriority.success){
+                    itemsPriorityList?.forEach { priorityItem ->
+                        _todoItems.value?.forEach {
+                            if(priorityItem?.priority == it.priority){
+                                it.priority = !priorityItem.priority
+                            }
+                        }
                      }
 
                     _priorityItems.value = itemsPriorityList as List<TodoItem>

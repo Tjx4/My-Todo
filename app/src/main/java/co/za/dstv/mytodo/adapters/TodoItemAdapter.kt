@@ -2,18 +2,15 @@ package co.za.dstv.mytodo.adapters
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import co.za.dstv.mytodo.R
-import co.za.dstv.mytodo.constants.INDEX
 import co.za.dstv.mytodo.constants.TODO_ITEM_KEY
 import co.za.dstv.mytodo.extensions.SLIDE_IN_ACTIVITY
 import co.za.dstv.mytodo.extensions.blinkView
@@ -22,7 +19,8 @@ import co.za.dstv.mytodo.features.dashboard.DashboardActivity
 import co.za.dstv.mytodo.features.item.ItemViewActivity
 import co.za.dstv.mytodo.models.TodoItem
 
-class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : RecyclerView.Adapter<TodoItemAdapter.ViewHolder>() {
+
+class TodoItemAdapter(context: Context, var todoItems: List<TodoItem>) : RecyclerView.Adapter<TodoItemAdapter.ViewHolder>() {
     private val dashboardActivity = context as DashboardActivity
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var todoItemClickListener: TodoItemClickListener? = null
@@ -35,7 +33,10 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        allItems.add(holder)
+        if (holder !in allItems){
+            allItems.add(holder)
+        }
+
         val todoItem = todoItems[position]
         holder.titleTv.text = todoItem.title
         holder.descriptionTv.text = todoItem.description
@@ -81,10 +82,14 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
 
                 if (isEmptyCheckList) {
                     holder.itemView.blinkView(0.6f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
-                        val item =  todoItems[position]
+                        val item = todoItems[position]
                         var payload = Bundle()
                         payload.putParcelable(TODO_ITEM_KEY, item)
-                        dashboardActivity.navigateToActivity(ItemViewActivity::class.java, SLIDE_IN_ACTIVITY, payload)
+                        dashboardActivity.navigateToActivity(
+                            ItemViewActivity::class.java,
+                            SLIDE_IN_ACTIVITY,
+                            payload
+                        )
                     })
 
                 } else {
@@ -116,23 +121,6 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         }
     }
 
-    fun deselectAllItem(){
-        try{
-            var indx = 0
-            allItems.forEach() {
-                    deselectItem(it, it.position)
-                    if(todoItems[it.position]?.priority){
-                        setItemPriority(it)
-                    }
-                indx++
-            }
-        }
-        catch (ex: Exception){
-            Log.e("AD_ERR", "$ex")
-        }
-
-    }
-
     private fun deselectItem(holder: ViewHolder, position: Int) {
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item)
@@ -153,6 +141,11 @@ class TodoItemAdapter(context: Context, val todoItems: List<TodoItem>) : Recycle
         val parentView = holder?.itemView as View
         parentView.background = dashboardActivity.getDrawable(R.drawable.list_item_priority)
         holder.checkedImg.visibility = View.GONE
+    }
+
+    fun updateItems(todoItems: List<TodoItem>) {
+        this.todoItems = todoItems
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
