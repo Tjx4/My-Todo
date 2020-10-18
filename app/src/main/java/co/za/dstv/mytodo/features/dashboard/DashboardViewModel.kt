@@ -231,9 +231,8 @@ class DashboardViewModel(application: Application, private val dashboardReposito
 
                         if(itemIndex != null){
                             val item = _todoItems.value?.get(itemIndex)
-                            item?.priority = priorityItem?.priority ?: false
+                            item?.priority = !priorityItem?.priority!!
                         }
-
                      }
 
                     _priorityItems.value = itemsPriorityList as List<TodoItem>
