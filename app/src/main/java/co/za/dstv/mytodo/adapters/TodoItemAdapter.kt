@@ -2,6 +2,7 @@ package co.za.dstv.mytodo.adapters
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class TodoItemAdapter(context: Context, var todoItems: List<TodoItem>) : Recycle
     private var todoItemClickListener: TodoItemClickListener? = null
     var selectedPos = 0
     var allItems = ArrayList<ViewHolder>()
+    var itemClicked = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.todo_item_layout, parent, false)
@@ -66,6 +68,7 @@ class TodoItemAdapter(context: Context, var todoItems: List<TodoItem>) : Recycle
         position: Int
     ) {
         holder.itemView.setOnClickListener() {
+            val view = it
             selectedPos = position
 
             if(todoItem.isSelected) {
@@ -81,16 +84,23 @@ class TodoItemAdapter(context: Context, var todoItems: List<TodoItem>) : Recycle
                     dashboardActivity.dashboardViewModel.checkList.value?.isNullOrEmpty() ?: true
 
                 if (isEmptyCheckList) {
-                    holder.itemView.blinkView(0.6f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
-                        val item = todoItems[position]
-                        var payload = Bundle()
-                        payload.putParcelable(TODO_ITEM_KEY, item)
-                        dashboardActivity.navigateToActivity(
-                            ItemViewActivity::class.java,
-                            SLIDE_IN_ACTIVITY,
-                            payload
-                        )
-                    })
+                    if (!itemClicked){
+                        itemClicked = true
+                        holder.itemView.blinkView(0.6f, 1.0f, 150, 2, Animation.ABSOLUTE, 0, {
+                            val item = todoItems[position]
+                            var payload = Bundle()
+                            payload.putParcelable(TODO_ITEM_KEY, item)
+                            dashboardActivity.navigateToActivity(
+                                ItemViewActivity::class.java,
+                                SLIDE_IN_ACTIVITY,
+                                payload
+                            )
+
+                            Handler().postDelayed({
+                                itemClicked = false
+                            }, 1000)
+                        })
+                    }
 
                 } else {
                     dashboardActivity.dashboardViewModel.checkList.value?.add(position)
