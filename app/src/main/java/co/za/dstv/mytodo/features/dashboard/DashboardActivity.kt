@@ -76,18 +76,13 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         dashboardViewModel.priorityItems.observe(this, Observer { onPriorityItemsSet(it) })
         dashboardViewModel.isNoItems.observe(this, Observer { onNoItems(it) })
         dashboardViewModel.todoItems.observe(this, Observer { onTodoItemsSet(it) })
+        dashboardViewModel.updatedItems.observe(this, Observer { onTodoItemsUpdated(it) })
         dashboardViewModel.checkList.observe(this, Observer { onCheckListUpdated(it) })
     }
 
     private fun iniViews() {
         todRvLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvItems?.layoutManager = todRvLayoutManager
-    }
-
-    private fun onNoItems(isNoItems: Boolean) {
-        llLoading.visibility = View.GONE
-        rvItems.visibility = View.GONE
-        tvNoItems.visibility = View.VISIBLE
     }
 
     private fun onShowLoading(isBusy: Boolean) {
@@ -128,37 +123,37 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         tvNoItems.visibility = View.GONE
     }
 
+    private fun onTodoItemsUpdated(todoItems: List<TodoItem>) {
+        todRvLayoutManager.initialPrefetchItemCount = todoItems.size
+        todoItemAdapter?.updateItems(todoItems)
+    }
+
+    private fun onNoItems(isNoItems: Boolean) {
+        llLoading.visibility = View.GONE
+        rvItems.visibility = View.GONE
+        tvNoItems.visibility = View.VISIBLE
+    }
+
     override fun onServiceCategoryClick(view: View, position: Int) {
 
     }
 
     private fun onItemAdded(todoItems: TodoItem) {
-        hideCurrentLoadingDialog(this)
+        setViewMode(true)
+        dashboardViewModel.checkList.value?.clear()
         showSuccessAlert(this, getString(R.string.done), getString(R.string.item_added), getString(R.string.ok)) {
-            rvItems.scrollToPosition(0)
-            todoItemAdapter?.notifyDataSetChanged()
-            dashboardViewModel.updateProgress()
+            dashboardViewModel?.setTodoItems()
             addItemFragment.dismiss()
         }
     }
 
     private fun onItemsDeleted(deletedItems: List<TodoItem>) {
-        deletedItems.forEach { item ->
-            val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
-            currentItems.remove(item)
-        }
-
-        todoItemAdapter?.notifyDataSetChanged()
+        resetItemList()
         Toast.makeText(this, dashboardViewModel.itemDeleteMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun onPriorityItemsSet(priorityItems: List<TodoItem>) {
-        priorityItems.forEach { item ->
-            val currentItems = ((todoItemAdapter?.todoItems) as ArrayList)
-            item.isSelected = false
-        }
-
-        todoItemAdapter?.notifyDataSetChanged()
+        resetItemList()
     }
 
     private fun onError(errorMessage: String) {
@@ -169,9 +164,11 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
         addItemFragment.contentSv.smoothScrollTo(0,0)
     }
 
+    fun resetItemList(){
+        dashboardViewModel.updateTodoItems()
+    }
+
     fun onAddButtonClicked(view: View){
-        todoItemAdapter?.deselectAllItem()
-        setViewMode(true)
         addItemFragment = AddItemFragment.newInstance()
         addItemFragment.isCancelable = true
         showDialogFragment(getString(R.string.add_item), R.layout.fragment_add_item, addItemFragment,this)
@@ -188,12 +185,10 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delette_item -> {
-                todoItemAdapter?.deselectAllItem()
                 setViewMode(true)
-                dashboardViewModel.checkAndDeleteItems()
+                dashboardViewModel.deleteTodoItems()
             }
             R.id.action_priority -> {
-                todoItemAdapter?.deselectAllItem()
                 setViewMode(true)
                 dashboardViewModel.setPriorityOnSelectedItems()
             }
@@ -212,10 +207,9 @@ class DashboardActivity : BaseParentActivity(), TodoItemAdapter.TodoItemClickLis
                 return super.onKeyDown(keyCode, event)
             }
             else{
-                todoItemAdapter?.deselectAllItem()
                 dashboardViewModel.checkList.value?.clear()
-                dashboardViewModel.checkList.value = dashboardViewModel.checkList.value
-                todoItemAdapter?.notifyDataSetChanged()
+                setViewMode(true)
+                resetItemList()
             }
         }
         return true
